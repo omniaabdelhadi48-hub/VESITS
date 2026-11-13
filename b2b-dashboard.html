@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VESTIS - التجار</title>
+<style>
+body{font-family:Arial;background:#f5f5f5;margin:0}
+.header{background:#111;color:#fff;padding:16px;display:flex;justify-content:space-between;align-items:center}
+.box{background:#fff;margin:15px auto;padding:18px;border-radius:12px;max-width:650px}
+input,select{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #ddd;box-sizing:border-box}
+button{background:#111;color:#fff;border:none;padding:12px;width:100%;border-radius:8px;cursor:pointer;font-weight:bold;margin-top:8px}
+button.outline{background:#fff;color:#111;border:1px solid #111}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tabs button{width:auto;padding:10px 14px}
+.tabs button.active{background:#fff;color:#111;border:2px solid #111}
+.card{border:1px solid #ddd;padding:15px;border-radius:10px;margin:10px 0}
+label{font-weight:bold;font-size:14px}
+.small{font-size:13px;color:#666}
+.tag{background:#fffbe6;padding:4px 10px;border-radius:20px;font-weight:bold}
+</style>
+</head>
+<body>
+
+<!-- 1. تسجيل التاجر - أول حاجة -->
+<div id="loginBox" class="box" style="margin-top:30px">
+<h2 style="text-align:center">VESTIS - دخول التجار</h2>
+<p style="text-align:center" class="small">سجل بيانات محلك وادخل على طول، من غير واتساب ومن غير كود</p>
+<label>اسم المحل *</label>
+<input id="storeName" placeholder="مثال: محل النور">
+<label>اسم صاحب المحل *</label>
+<input id="ownerName" placeholder="مثال: أحمد محمد">
+<label>رقم الموبايل *</label>
+<input id="phone" placeholder="01xxxxxxxxx">
+<label>المحافظة / العنوان</label>
+<input id="address" placeholder="مثال: أسوان - كوم أمبو">
+<button onclick="register()">دخول لصفحة التجار</button>
+</div>
+
+<!-- 2. صفحة التاجر -->
+<div id="dashboard" style="display:none">
+<div class="header">
+<b>VESTIS - التجار</b>
+<button onclick="logout()" style="width:auto;background:#fff;color:#111;padding:8px 16px">خروج</button>
+</div>
+
+<div class="box">
+<h2 id="welcome">أهلاً بيك</h2>
+<p id="storeInfo" class="small"></p>
+<p><b>نقاطك:</b> <span id="points">0</span> نقطة | <b>كودك المجهول:</b> <span id="myCode" class="tag">T-001</span></p>
+<div class="tabs">
+<button id="tab1" class="active" onclick="showTab('market')">سوق الرواكد</button>
+<button id="tab2" onclick="showTab('upload')">ارفع بضاعتك</button>
+<button id="tab3" onclick="showTab('wallet')">محفظة الآجل</button>
+<button id="tab4" onclick="showTab('clearance')">التصفيات</button>
+</div>
+</div>
+
+<!-- سوق الرواكد المجهول -->
+<div id="sec-market" class="box">
+<h3>📦 سوق الرواكد المجهول</h3>
+<p class="small">كل البضاعة بالأكواد بس، من غير اسم ولا رقم ولا عنوان. انت الوسيط VESTIS بس.</p>
+<div id="marketList"></div>
+</div>
+
+<!-- رفع بضاعة -->
+<div id="sec-upload" class="box" style="display:none">
+<h3>ارفع بضاعتك الراكدة</h3>
+<label>نوع البضاعة</label>
+<input id="pType" placeholder="مثال: 20 بنطلون جينز">
+<label>المقاسات المتاحة</label>
+<input id="pSizes" placeholder="مثال: M - L - XL">
+<label>سعر القطعة اللي انت عايزه</label>
+<input id="pPrice" type="number" placeholder="مثال: 150">
+<label>صورة البضاعة</label>
+<input type="file">
+<button onclick="uploadProduct()">ارفع البضاعة وخد كود RK</button>
+<p class="small">السيستم هيدي بضاعتك كود RK-xxx، ومحدش هيشوف اسمك.</p>
+<h4>بضاعتي المرفوعة</h4>
+<div id="myProducts"></div>
+</div>
+
+<!-- محفظة الآجل -->
+<div id="sec-wallet" class="box" style="display:none">
+<h3>💰 محفظة الآجل</h3>
+<p class="small">اشترك واشتري آجل، والضمان كله جوه الموقع.</p>
+<div class="card">
+<h3>باقة التاجر - 149ج / شهر</h3>
+<p>آجل لحد 10,000ج - سداد على شهرين</p>
+<button onclick="openWallet('باقة التاجر - 149ج')">اشترك في الباقة دي</button>
+</div>
+<div class="card" style="background:#111;color:#fff">
+<h3>⭐ باقة التاجر برو - 299ج / شهر</h3>
+<p>آجل لحد 30,000ج - سداد على 3 شهور</p>
+<button onclick="openWallet('باقة التاجر برو - 299ج')" style="background:#fff;color:#111">اشترك في الباقة دي</button>
+</div>
+<div id="walletForm" style="display:none">
+<h4>ارفع الضمان - كله جوه الموقع</h4>
+<label>صورة البطاقة وش وضهر</label><input type="file">
+<label>سيلفي بالبطاقة</label><input type="file">
+<label>فيديو 10 ثواني: الاسم + الرقم القومي + المبلغ + المدة + VESTIS</label><input type="file">
+<label>صورة وصل أمانة ممضي ومبصوم + بطاقة ضامن</label><input type="file">
+<label><input type="checkbox" id="agree" style="width:auto"> موافق على العقد الإلكتروني</label>
+<button onclick="submitWallet()">ابعت طلب المحفظة للمراجعة</button>
+<p id="walletStatus" class="small"></p>
+</div>
+</div>
+
+<!-- التصفيات -->
+<div id="sec-clearance" class="box" style="display:none">
+<h3>🏷️ التصفيات</h3>
+<p class="small">البضاعة اللي ما اتباعتش بتتحول لنقاط. كل 1 جنيه = 1 نقطة. تشتري بيها من VESTIS.</p>
+<div class="card"><b>بلوزات تصفيات</b><br>بسعر الجملة - اطلب من VESTIS<button onclick="alert('تم إرسال طلبك لـ VESTIS')">اطلب</button></div>
+<div class="card"><b>بناطيل تصفيات</b><br>بسعر الجملة - اطلب من VESTIS<button onclick="alert('تم إرسال طلبك لـ VESTIS')">اطلب</button></div>
+</div>
+
+</div>
+
+<script>
+var market = [
+ {code:'RK-101', title:'20 بنطلون جينز', sizes:'M - L - XL', price:'150ج / قطعة'},
+ {code:'RK-102', title:'15 بلوزة', sizes:'S - M - L', price:'120ج / قطعة'},
+ {code:'RK-103', title:'30 تيشيرت', sizes:'L - XL', price:'90ج / قطعة'},
+];
+function showPage(){
+ var d = localStorage.getItem('vestis_merchant');
+ if(d){
+  var m = JSON.parse(d);
+  document.getElementById('loginBox').style.display='none';
+  document.getElementById('dashboard').style.display='block';
+  document.getElementById('welcome').innerText = 'أهلاً بيك يا ' + m.storeName + ' 👋';
+  document.getElementById('storeInfo').innerText = m.ownerName + ' | ' + m.phone + ' | ' + m.address;
+  document.getElementById('myCode').innerText = m.code || 'T-001';
+  document.getElementById('points').innerText = m.points || 0;
+  renderMarket(); renderMy();
+ } else {
+  document.getElementById('loginBox').style.display='block';
+  document.getElementById('dashboard').style.display='none';
+ }
+}
+function register(){
+ var s=document.getElementById('storeName').value.trim();
+ var o=document.getElementById('ownerName').value.trim();
+ var p=document.getElementById('phone').value.trim();
+ var a=document.getElementById('address').value.trim();
+ if(!s||!o||!p){alert('اكتب اسم المحل واسمك ورقمك الأول');return;}
+ var code='T-'+Math.floor(100+Math.random()*900);
+ localStorage.setItem('vestis_merchant', JSON.stringify({storeName:s, ownerName:o, phone:p, address:a, code:code, points:0}));
+ showPage();
+}
+function logout(){localStorage.removeItem('vestis_merchant');showPage();}
+function showTab(t){
+ ['market','upload','wallet','clearance'].forEach(function(x){
+  document.getElementById('sec-'+x).style.display = (x==t?'block':'none');
+  document.getElementById('tab'+(['market','upload','wallet','clearance'].indexOf(x)+1)).className = (x==t?'active':'');
+ });
+}
+function renderMarket(){
+ var h='';
+ market.forEach(function(item){
+  h += '<div class="card"><b>'+item.code+'</b> - '+item.title+'<br><span class="small">'+item.sizes+' | '+item.price+'</span><button onclick="requestCode(\''+item.code+'\')">اطلب الكود '+item.code+'</button></div>';
+ });
+ document.getElementById('marketList').innerHTML=h;
+}
+function requestCode(code){
+ var m=JSON.parse(localStorage.getItem('vestis_merchant'));
+ alert('تم إرسال طلبك للكود '+code+' لـ VESTIS.\nالتاجر التاني مش هيشوف بياناتك، و VESTIS هي اللي هتوصلكم ببعض.\nالعمولة: 20ج على العملية + اشتراك 99ج/شهر');
+}
+function uploadProduct(){
+ var t=document.getElementById('pType').value.trim();
+ var pr=document.getElementById('pPrice').value.trim();
+ if(!t||!pr){alert('اكتب نوع البضاعة والسعر');return;}
+ var code='RK-'+Math.floor(100+Math.random()*900);
+ var my=JSON.parse(localStorage.getItem('vestis_my')||'[]');
+ my.push({code:code, title:t, price:pr});
+ localStorage.setItem('vestis_my', JSON.stringify(my));
+ alert('تم رفع بضاعتك! كودك هو '+code);
+ renderMy();
+}
+function renderMy(){
+ var my=JSON.parse(localStorage.getItem('vestis_my')||'[]');
+ var h=my.length? '' : '<p class="small">لسه مرفعتش بضاعة.</p>';
+ my.forEach(function(p){ h+='<div class="card"><b>'+p.code+'</b> - '+p.title+' - '+p.price+'ج</div>'; });
+ document.getElementById('myProducts').innerHTML=h;
+}
+function openWallet(name){
+ document.getElementById('walletForm').style.display='block';
+ document.getElementById('walletStatus').innerText='انت اخترت: '+name+' - ارفع الضمان كله هنا.';
+}
+function submitWallet(){
+ if(!document.getElementById('agree').checked){alert('وافق على العقد الأول');return;}
+ document.getElementById('walletStatus').innerText='تم إرسال طلبك، VESTIS هتراجع الضمان وترد عليك هنا. من غير واتساب.';
+ alert('تم إرسال طلب المحفظة للمراجعة');
+}
+showPage();
+</script>
+</body>
+</html>
