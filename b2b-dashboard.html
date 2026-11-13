@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تجار VESTIS</title>
+<style>
+  body { font-family: Arial; background: #f5f5f5; margin: 0; }
+  .header { background: #111; color: #fff; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+  .box { background: #fff; margin: 20px auto; padding: 20px; border-radius: 12px; max-width: 500px; }
+  input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; }
+  button { background: #111; color: #fff; border: none; padding: 13px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; }
+  .products { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+  .product { border: 1px solid #ddd; padding: 15px; border-radius: 10px; text-align: center; }
+  label { font-weight: bold; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<!-- تسجيل التاجر -->
+<div id="loginBox" class="box" style="margin-top:40px;">
+  <h2 style="text-align:center;">VESTIS - دخول التجار</h2>
+  <p style="text-align:center;">سجل بيانات محلك وادخل على طول</p>
+  
+  <label>اسم المحل *</label>
+  <input type="text" id="storeName" placeholder="مثال: محل النور">
+
+  <label>اسم صاحب المحل *</label>
+  <input type="text" id="ownerName" placeholder="مثال: أحمد محمد">
+
+  <label>رقم الموبايل *</label>
+  <input type="tel" id="phone" placeholder="01xxxxxxxxx">
+
+  <label>المحافظة / العنوان</label>
+  <input type="text" id="address" placeholder="مثال: أسوان - كوم أمبو">
+
+  <button onclick="register()">دخول لصفحة التجار</button>
+</div>
+
+<!-- صفحة التجار -->
+<div id="dashboard" style="display:none;">
+  <div class="header">
+    <h1 style="margin:0; font-size:20px;">VESTIS - صفحة التجار</h1>
+    <button onclick="logout()" style="width:auto; background:#fff; color:#111; padding:10px 18px;">خروج</button>
+  </div>
+  <div class="box">
+    <h2 id="welcome">أهلاً بيك 👋</h2>
+    <p id="storeInfo"></p>
+  </div>
+  <div class="box">
+    <h2>المنتجات</h2>
+    <div class="products">
+      <div class="product"><h3>منتج 1</h3><p>200 جنيه</p><button>اطلب</button></div>
+      <div class="product"><h3>منتج 2</h3><p>350 جنيه</p><button>اطلب</button></div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showPage() {
+  var data = localStorage.getItem('vestis_merchant');
+  if (data) {
+    var m = JSON.parse(data);
+    document.getElementById('loginBox').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    document.getElementById('welcome').innerText = 'أهلاً بيك يا ' + m.storeName + ' 👋';
+    document.getElementById('storeInfo').innerText = 'صاحب المحل: ' + m.ownerName + ' | رقمك: ' + m.phone + ' | ' + m.address;
+  } else {
+    document.getElementById('loginBox').style.display = 'block';
+    document.getElementById('dashboard').style.display = 'none';
+  }
+}
+
+function register() {
+  var storeName = document.getElementById('storeName').value.trim();
+  var ownerName = document.getElementById('ownerName').value.trim();
+  var phone = document.getElementById('phone').value.trim();
+  var address = document.getElementById('address').value.trim();
+
+  if (!storeName || !ownerName || !phone) {
+    alert('اكتب اسم المحل واسمك ورقمك الأول');
+    return;
+  }
+
+  var data = { storeName: storeName, ownerName: ownerName, phone: phone, address: address };
+  localStorage.setItem('vestis_merchant', JSON.stringify(data));
+  showPage();
+}
+
+function logout() {
+  localStorage.removeItem('vestis_merchant');
+  showPage();
+}
+
+showPage();
+</script>
+
+</body>
+</html>
