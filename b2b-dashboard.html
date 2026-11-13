@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تجار VESTIS</title>
+<style>
+  body { font-family: Arial; background: #f5f5f5; margin: 0; }
+  .header { background: #111; color: #fff; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+  .box { background: #fff; margin: 20px; padding: 20px; border-radius: 12px; }
+  input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; }
+  button { background: #111; color: #fff; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; }
+  .products { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+  .product { border: 1px solid #ddd; padding: 15px; border-radius: 10px; text-align: center; }
+</style>
+</head>
+<body>
+
+<!-- صفحة الدخول -->
+<div id="loginBox" class="box" style="max-width:400px; margin:50px auto; text-align:center;">
+  <h2>VESTIS - دخول التجار</h2>
+  <p>دخل الكود الخاص بالتجار</p>
+  <input type="password" id="code" placeholder="الكود">
+  <button onclick="login()">دخول</button>
+</div>
+
+<!-- صفحة التجار -->
+<div id="dashboard" style="display:none;">
+  <div class="header">
+    <h1 style="margin:0;">VESTIS - صفحة التجار</h1>
+    <button onclick="logout()" style="width:auto; background:#fff; color:#111; padding:10px 18px;">خروج</button>
+  </div>
+  <div class="box">
+    <h2>أهلاً بيك يا تاجر 👋</h2>
+    <p>دي صفحة التجار الخاصة.</p>
+  </div>
+  <div class="box">
+    <h2>المنتجات</h2>
+    <div class="products">
+      <div class="product"><h3>منتج 1</h3><p>200 جنيه</p><button>اطلب</button></div>
+      <div class="product"><h3>منتج 2</h3><p>350 جنيه</p><button>اطلب</button></div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showPage() {
+  if (sessionStorage.getItem('vestis_merchant') === 'yes') {
+    document.getElementById('loginBox').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+  } else {
+    document.getElementById('loginBox').style.display = 'block';
+    document.getElementById('dashboard').style.display = 'none';
+  }
+}
+
+function login() {
+  var code = document.getElementById('code').value;
+  if (code === '1234') {
+    sessionStorage.setItem('vestis_merchant', 'yes');
+    showPage();
+  } else {
+    alert('الكود غلط');
+  }
+}
+
+function logout() {
+  sessionStorage.removeItem('vestis_merchant');
+  showPage();
+}
+
+showPage();
+</script>
+
+</body>
+</html>
