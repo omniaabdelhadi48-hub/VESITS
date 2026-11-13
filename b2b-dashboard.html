@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VESTIS</title>
+<style>
+body{font-family:Arial;background:#f5f5f5;margin:0;padding:15px}
+.box{background:#fff;padding:20px;border-radius:12px;max-width:500px;margin:20px auto}
+input{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box}
+button{background:#111;color:#fff;border:none;padding:12px;width:100%;border-radius:8px;font-weight:bold;margin-top:10px}
+.card{border:1px solid #ddd;padding:15px;border-radius:10px;margin:10px 0}
+</style>
+</head>
+<body>
+
+<div id="login" class="box">
+<h2 style="text-align:center">VESTIS - دخول التجار</h2>
+<p style="text-align:center">سجل بياناتك وادخل</p>
+<input id="store" placeholder="اسم المحل">
+<input id="name" placeholder="اسم صاحب المحل">
+<input id="phone" placeholder="رقم الموبايل">
+<input id="addr" placeholder="المحافظة / العنوان">
+<button onclick="go()">دخول</button>
+<p id="msg" style="color:red;text-align:center"></p>
+</div>
+
+<div id="home" class="box" style="display:none">
+<h2 id="hi">اهلا بيك</h2>
+<p id="info"></p>
+<p><b>نقاطك:</b> 0 نقطة</p>
+<hr>
+<h3>سوق الرواكد المجهول</h3>
+<div class="card"><b>RK-101</b> - 20 بنطلون جينز<br>150ج / قطعة<br><button onclick="alert('تم ارسال طلبك لـ VESTIS')">اطلب الكود RK-101</button></div>
+<div class="card"><b>RK-102</b> - 15 بلوزة<br>120ج / قطعة<br><button onclick="alert('تم ارسال طلبك لـ VESTIS')">اطلب الكود RK-102</button></div>
+<hr>
+<h3>محفظة الاجل</h3>
+<div class="card"><b>باقة التاجر - 149ج / شهر</b><br>اجل لحد 10,000ج - سداد شهرين<br><button onclick="alert('تم ارسال طلب المحفظة للمراجعة')">اشترك</button></div>
+<div class="card"><b>باقة التاجر برو - 299ج / شهر</b><br>اجل لحد 30,000ج - سداد 3 شهور<br><button onclick="alert('تم ارسال طلب المحفظة للمراجعة')">اشترك</button></div>
+<hr>
+<h3>ارفع بضاعتك</h3>
+<input id="prod" placeholder="مثال: 20 بنطلون">
+<button onclick="up()">ارفع وخد كود</button>
+<p id="my"></p>
+<button onclick="out()" style="background:#eee;color:#111">خروج</button>
+</div>
+
+<script>
+function go(){
+  var s = document.getElementById('store').value;
+  var n = document.getElementById('name').value;
+  var p = document.getElementById('phone').value;
+  if(s == "" || n == "" || p == ""){
+    document.getElementById('msg').innerHTML = "اكتب اسم المحل واسمك ورقمك الاول";
+    return;
+  }
+  document.getElementById('login').style.display = "none";
+  document.getElementById('home').style.display = "block";
+  document.getElementById('hi').innerHTML = "اهلا بيك يا " + s;
+  document.getElementById('info').innerHTML = n + " | " + p;
+}
+function up(){
+  var v = document.getElementById('prod').value;
+  if(v == ""){ alert("اكتب نوع البضاعة"); return; }
+  var code = "RK-" + Math.floor(Math.random()*900+100);
+  document.getElementById('my').innerHTML = "تم الرفع! كودك هو: " + code;
+}
+function out(){
+  document.getElementById('home').style.display = "none";
+  document.getElementById('login').style.display = "block";
+}
+</script>
+
+</body>
+</html>
