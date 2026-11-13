@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VESTIS | منصة الأزياء المتكاملة</title>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a1a1a;
+            --accent: #c59d5f;
+            --bg: #f8f6f2;
+            --white: #ffffff;
+            --text-muted: #666666;
+            --b2b-color: #2c3e50;
+            --b2c-color: #8e44ad;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 1.2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--accent);
+        }
+
+        .badge {
+            background: rgba(255,255,255,0.1);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+
+        .hero-text {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero-text h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .hero-text p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .portals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .portal-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            border-top: 6px solid transparent;
+        }
+
+        .portal-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .portal-card.b2b { border-top-color: var(--b2b-color); }
+        .portal-card.b2c { border-top-color: var(--b2c-color); }
+
+        .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .portal-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .features-list {
+            list-style: none;
+            text-align: right;
+            margin: 1.5rem 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .features-list li {
+            margin-bottom: 0.6rem;
+            padding-right: 1.5rem;
+            position: relative;
+        }
+
+        .features-list li::before {
+            content: "✓";
+            position: absolute;
+            right: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            color: var(--white);
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover { opacity: 0.9; }
+        .btn-b2b { background-color: var(--b2b-color); }
+        .btn-b2c { background-color: var(--b2c-color); }
+
+        .form-section {
+            display: none;
+            background: var(--white);
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+            text-align: right;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            text-decoration: underline;
+        }
+
+        .alert-box {
+            display: none;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1.5rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .alert-b2b { background: #eef2f7; color: var(--b2b-color); border: 1px solid #cbd5e1; }
+        .alert-b2c { background: #f5eef8; color: var(--b2c-color); border: 1px solid #e1bee7; }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--primary);
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">VESTIS</div>
+        <div class="badge">منصة معزولة ومؤمنة بالكامل 🔒</div>
+    </header>
+
+    <div class="container">
+        <div id="selection-screen">
+            <div class="hero-text">
+                <h1>مرحباً بكِ في منصة VESTIS</h1>
+                <p>يرجى اختيار البوابة الخاصة بكِ. كل بوابة معزولة تماماً لضمان الخصوصية.</p>
+            </div>
+
+            <div class="portals-grid">
+                <div class="portal-card b2b">
+                    <div class="icon">🏢</div>
+                    <h2>بوابة التجار وأصحاب البوتيكات (B2B)</h2>
+                    <ul class="features-list">
+                        <li>سوق الرواكد المجهول (تداول بالأكواد السرية فقط)</li>
+                        <li>تحويل البضاعة الراكدة إلى نقاط نشطة</li>
+                        <li>تفعيل محفظة الآجل (حتى 30,000 جنيه)</li>
+                        <li>ظهور بوتيكك في خريطة ترشيحات الفتيات</li>
+                    </ul>
+                    <button class="btn btn-b2b" onclick="openPortal('b2b')">دخول / تسجيل كتاجر</button>
+                </div>
+
+                <div class="portal-card b2c">
+                    <div class="icon">👗</div>
+                    <h2>بوابة الفتيات والأفراد (B2C)</h2>
+                    <ul class="features-list">
+                        <li>قسم التصفيات الحصري بأسعار مخفضة</li>
+                        <li>دليل المقاسات الذكي وأقرب بوتيك لكِ</li>
+                        <li>التصويت الشهري لاختيار ألوان وموديلات الشهر</li>
+                        <li>خدمة تعديل الملابس (تطويل، بطانة، أكمام)</li>
+                    </ul>
+                    <button class="btn btn-b2c" onclick="openPortal('b2c')">دخول / تسجيل كعميلة</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="b2b-form" class="form-section">
+            <button class="back-btn" onclick="goBack()">← العودة لاختيار البوابة</button>
+            <h2 style="color: var(--b2b-color); margin-bottom: 0.5rem;">تسجيل حساب تاجر (B2B)</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+                لضمان سرية الأسعار، يتم مراجعة بيانات المحل يدوياً من الإدارة قبل تفعيل الحساب.
+            </p>
+            <form onsubmit="submitB2B(event)">
+                <div class="form-group">
+                    <label>الاسم بالكامل (صاحب المحل)</label>
+                    <input type="text" id="b2b-name" required placeholder="مثال: أحمد محمود">
+                </div>
+                <div class="form-group">
+                    <label>اسم المحل / البوتيك (إلزامي للتحقق)</label>
+                    <input type="text" id="b2b-shop" required placeholder="مثال: بوتيك الملكة للأزياء">
+                </div>
+                <div class="form-group">
+                    <label>المحافظة / المدينة</label>
+                    <select id="b2b-city" required>
+                        <option value="">اختر المحافظة...</option>
+                        <option value="أسوان">أسوان</option>
+                        <option value="الأقصر">الأقصر</option>
+                        <option value="قنا">قنا</option>
+                        <option value="سوهاج">سوهاج</option>
+                        <option value="القاهرة">القاهرة</option>
+                        <option value="أخرى">محافظة أخرى</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>رقم الهاتف (للتواصل مع الإدارة فقط - لا يظهر لأي تاجر)</label>
+                    <input type="tel" id="b2b-phone" required placeholder="01xxxxxxxxx">
+                </div>
+                <button type="submit" class="btn btn-b2b">إرسال طلب التفعيل للإدارة</button>
+            </form>
+            <div id="b2b-alert" class="alert-box alert-b2b"></div>
+        </div>
+
+        <div id="b2c-form" class="form-section">
+            <button class="back-btn" onclick="goBack()">← العودة لاختيار البوابة</button>
+            <h2 style="color: var(--b2c-color); margin-bottom: 0.5rem;">تسجيل حساب جديد (B2C)</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+                استمتعي بالتصويت الشهري، دليل المقاسات الذكي، وقسم التصفيات.
+            </p>
+            <form onsubmit="submitB2C(event)">
+                <div class="form-group">
+                    <label>الاسم</label>
+                    <input type="text" id="b2c-name" required placeholder="مثال: سارة علي">
+                </div>
+                <div class="form-group">
+                    <label>المدينة / المنطقة</label>
