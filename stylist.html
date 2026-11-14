@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VESTIS - الاستايلست</title>
+<style>
+*{box-sizing:border-box;font-family:'Segoe UI',Tahoma}
+body{margin:0;background:#1A1A2E;color:#fff;padding:16px}
+.card{background:#24243e;border:1px solid #E94B8A;border-radius:16px;padding:16px;margin:12px 0}
+h1{color:#E94B8A;text-align:center}
+h2{color:#ffb3d1}
+label{display:block;margin:12px 0 6px;font-weight:bold}
+select,input{width:100%;padding:12px;border-radius:10px;border:0;font-size:16px}
+button{background:#E94B8A;color:#fff;border:0;padding:14px;width:100%;border-radius:12px;font-size:18px;font-weight:bold;margin-top:12px;cursor:pointer}
+button:disabled{background:#777}
+.outfit{background:#fff;color:#222;border-radius:16px;padding:16px;margin-top:12px}
+.pill{display:inline-block;background:#FFE0EE;color:#8a1040;padding:6px 12px;border-radius:20px;margin:4px}
+.small{color:#ccc;font-size:14px}
+.order{background:#0f2a1a;border:1px solid #2ecc71;padding:12px;border-radius:12px;margin:8px 0}
+</style>
+</head>
+<body>
+<h1>VESTIS - الاستايلست</h1>
+<p style="text-align:center" id="trialText"></p>
+
+<div class="card" id="quiz">
+<h2>رايحة فين النهاردة؟</h2>
+<label>المناسبة</label>
+<select id="occasion">
+<option value="work">عمل / شغل</option>
+<option value="uni">جامعة</option>
+<option value="wedding">فرح / مناسبة</option>
+<option value="daily">خروجة يومية</option>
+</select>
+
+<label>محجبة ولا لأ؟</label>
+<select id="hijab"><option value="yes">محجبة</option><option value="no">مش محجبة</option></select>
+
+<label>طولك بالسم</label>
+<input id="height" type="number" placeholder="مثال: 165">
+<label>وزنك بالكيلو</label>
+<input id="weight" type="number" placeholder="مثال: 65">
+
+<label>لون بشرتك</label>
+<select id="skin">
+<option value="fair">فاتحة</option>
+<option value="medium">قمحية</option>
+<option value="dark">سمراء</option>
+</select>
+
+<label>ستايلك المفضل؟</label>
+<select id="style">
+<option value="classic">كلاسيك - هادي وراقي</option>
+<option value="casual">كاجوال - مريح</option>
+<option value="trendy">تريندي - موضة</option>
+<option value="modest">محتشم - واسع ومريح</option>
+</select>
+
+<label>روتين يومك؟</label>
+<select id="routine">
+<option value="walk">بمشي كتير ومواصلات</option>
+<option value="office">قاعدة في مكتب طول اليوم</option>
+<option value="stand">واقفة طول اليوم</option>
+<option value="mix">شوية كده وشوية كده</option>
+</select>
+
+<label>ميزانيتك للطقم؟</label>
+<select id="budget">
+<option value="low">اقل من 800ج</option>
+<option value="mid">800 - 1200ج</option>
+<option value="high">اكتر من 1200ج</option>
+</select>
+
+<button id="mainBtn" onclick="generate()">طلعيلي أحسن طقم ليا</button>
+<p class="small">الموقع عارف كل اللبس والخامات: قطن، كتان، روزالين، شيفون، ليكرا، جينز.</p>
+</div>
+
+<div id="result"></div>
+
+<div class="card">
+<h2>طلباتي - الأوردرات</h2>
+<div id="orders">لسه مفيش طلبات</div>
+</div>
+
+<script>
+let today = new Date().toDateString();
+let data = JSON.parse(localStorage.getItem('vestis_trials') || '{"date":"","count":0}');
+if(data.date !== today){ data = {date:today, count:0}; localStorage.setItem('vestis_trials', JSON.stringify(data)); }
+let left = 2 - data.count;
+let trialEl = document.getElementById('trialText');
+trialEl.innerText = 'ليكي النهاردة ' + left + ' تجربة مجانية - بعد كده اشتراك 149ج / شهر';
+if(left <= 0){
+  let b = document.getElementById('mainBtn');
+  b.disabled = true;
+  b.innerText = 'خلصتي تجارب النهاردة - اشتركي 149ج عشان تكملي';
+}
+
+let orders = JSON.parse(localStorage.getItem('vestis_orders') || '[]');
+let lastOutfit = '';
+renderOrders();
+
+function getSize(h,w){
+  let bmi = w / ((h/100)*(h/100));
+  if(bmi < 19) return 'S - مقاسك صغير، اختاري خامات فيها ليكرا';
+  if(bmi < 25) return 'M - مقاسك مظبوط';
+  if(bmi < 30) return 'L - اختاري قصات واسعة ومريحة';
+  return 'XL - اختاري خامات انسيابية زي الشيفون والكتان';
+}
+
+function generate(){
+  if(left <= 0){ alert('خلصتي تجارب النهاردة'); return; }
+  let occ = document.getElementById('occasion').value;
+  let hijab = document.getElementById('hijab').value;
+  let h = Number(document.getElementById('height').value || 165);
+  let w = Number(document.getElementById('weight').value || 65);
+  let skin = document.getElementById('skin').value;
+  let style = document.getElementById('style').value;
+  let routine = document.getElementById('routine').value;
+  let budget = document.getElementById('budget').value;
+
+  data.count++;
+  localStorage.setItem('vestis_trials', JSON.stringify(data));
+  left--;
+  trialEl.innerText = 'ليكي النهاردة ' + left + ' تجربة مجانية - بعد كده اشتراك 149ج';
+  if(left <= 0){
+    let b = document.getElementById('mainBtn');
+    b.disabled = true;
+    b.innerText = 'خلصتي تجارب النهاردة - اشتركي 149ج عشان تكملي';
+  }
+
+  let colors = [];
+  if(skin==='fair'){ colors = ['وردي هادي','بيج','سماوي','أبيض']; }
+  else if(skin==='medium'){ colors = ['زيتي','ترابي','كافيه','أبيض']; }
+  else { colors = ['أصفر مستردة','برتقالي هادي','أبيض','زيتي']; }
+
+  let fabric = '';
+  if(occ==='work'){ fabric = 'روزالين + قطن - خامة تقيلة وشيك وتنفع الشغل فعلا ومش بتتكسر'; }
+  else if(occ==='uni'){ fabric = 'كتان معالج + جينز - خفيف ومريح للحركة والمواصلات'; }
+  else if(occ==='wedding'){ fabric = 'شيفون + ستان - خامة سواريه وشيك'; }
+  else { fabric = 'قطن + ليكرا - مريح لليوم كله'; }
+
+  let top = hijab==='yes' ? 'بلوزة طويلة واسعة + بطانة' : 'بلوزة كلاسيك';
+  let bottom = '';
+  if(routine==='walk'){ bottom = 'بنطلون واسع مريح + جزمة فلات'; }
+  else if(routine==='stand'){ bottom = 'بنطلون واسع + شوز طبي'; }
+  else { bottom = 'بنطلون كلاسيك + هيلز متوسط'; }
+
+  let bag = '';
+  if(style==='classic'){ bag = 'شنطة جلد كلاسيك لون كافيه'; }
+  else if(style==='trendy'){ bag = 'شنطة صغيرة ترندي'; }
+  else { bag = 'شنطة كروس عملية كبيرة'; }
+
+  let accessory = hijab==='yes' ? 'طرحة شيفون بلون من ألوان الطقم + مكمل حجاب بالكباسين' : 'حلق بسيط + سلسلة رقيقة';
+  let price = budget==='low' ? 'حوالي 750ج' : budget==='mid' ? 'حوالي 1050ج' : 'حوالي 1350ج';
+  let sizeInfo = getSize(h,w);
+  let occText = occ==='work' ? 'للشغل فعلا' : occ==='uni' ? 'للجامعة' : occ==='wedding' ? 'للفرح' : 'للخروجة';
+  let shoeText = routine==='walk' ? 'فلات مريح - عشان بتمشي كتير' : routine==='office' ? 'هيلز متوسط شيك' : 'شوز طبي مريح';
+
+  lastOutfit = top + ' + ' + bottom + ' - ' + price;
+
+  let pills = '';
+  for(let i=0;i<colors.length;i++){ pills += '<span class="pill">' + colors[i] + '</span>'; }
+
+  let html = '<div class="outfit">'
+    + '<h2>طقمك المناسب ليكي - ' + occText + '</h2>'
+    + '<p><b>مقاسك:</b> ' + sizeInfo + '</p>'
+    + '<p><b>الطقم:</b> ' + top + ' + ' + bottom + '</p>'
+    + '<p><b>الخامة:</b> ' + fabric + '</p>'
+    + '<p><b>الألوان اللي تليق على بشرتك:</b><br>' + pills + '</p>'
+    + '<p><b>الشنطة:</b> ' + bag + '</p>'
+    + '<p><b>الاكسسوار:</b> ' + accessory + '</p>'
+    + '<p><b>الجزمة:</b> ' + shoeText + '</p>'
+    + '<p><b>السعر التقريبي:</b> ' + price + ' - موجود في بوتيك قريب منك</p>'
+    + '<p class="small">ليه الطقم ده؟ عشان طولك ' + h + ' ووزنك ' + w + ' وروتينك ' + routine + ' ومناسبتك ' + occ + ' - فاخترنا خامة وقصة تريحك وتنفع تروحي بيها الشغل فعلا مش مجرد شكل.</p>'
+    + '<button onclick="order()">اطلبي الطقم ده - تفعيل الأوردر</button>'
+    + '</div>';
+  document.getElementById('result').innerHTML = html;
+  document.getElementById('result').scrollIntoView();
+}
+
+function order(){
+  let order = {
+    id: 'V-' + Date.now().toString().slice(-5),
+    item: lastOutfit,
+    date: new Date().toLocaleString('ar-EG'),
+    status: 'تم استلام الطلب - جاري التجهيز من أقرب بوتيك'
+  };
+  orders.unshift(order);
+  localStorage.setItem('vestis_orders', JSON.stringify(orders));
+  renderOrders();
+  alert('تم تفعيل الأوردر! رقم طلبك: ' + order.id);
+}
+
+function renderOrders(){
+  if(!orders.length){ document.getElementById('orders').innerHTML='لسه مفيش طلبات'; return; }
+  let out = '';
+  for(let i=0;i<orders.length;i++){
+    out += '<div class="order"><b>' + orders[i].id + '</b> - ' + orders[i].item + '<br>' + orders[i].date + '<br>' + orders[i].status + '</div>';
+  }
+  document.getElementById('orders').innerHTML = out;
+}
+</script>
+</body>
+</html>
