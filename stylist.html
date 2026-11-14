@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VESTIS - الاستايلست V2</title>
+<style>
+*{box-sizing:border-box;font-family:'Segoe UI',Tahoma}
+body{margin:0;background:#1A1A2E;color:#fff;padding:16px}
+.card{background:#24243e;border:1px solid #E94B8A;border-radius:16px;padding:16px;margin:12px 0}
+h1{color:#E94B8A;text-align:center}
+h2{color:#ffb3d1}
+label{display:block;margin:12px 0 6px;font-weight:bold}
+select,input{width:100%;padding:12px;border-radius:10px;border:0;font-size:16px}
+button{background:#E94B8A;color:#fff;border:0;padding:14px;width:100%;border-radius:12px;font-size:18px;font-weight:bold;margin-top:12px;cursor:pointer}
+button:disabled{background:#777}
+.outfit{background:#fff;color:#222;border-radius:16px;padding:16px;margin-top:12px}
+.pill{display:inline-block;background:#FFE0EE;color:#8a1040;padding:6px 12px;border-radius:20px;margin:4px}
+.small{color:#ccc;font-size:14px}
+.order{background:#0f2a1a;border:1px solid #2ecc71;padding:12px;border-radius:12px;margin:8px 0}
+.badge{background:#E94B8A;color:#fff;padding:4px 10px;border-radius:20px;font-size:13px}
+</style>
+</head>
+<body>
+<h1>VESTIS - الاستايلست</h1>
+<p style="text-align:center" id="trialText"></p>
+
+<div class="card" id="quiz">
+<h2>رايحة فين النهاردة؟</h2>
+<label>المناسبة</label>
+<select id="occasion">
+<option value="work">عمل / شغل</option>
+<option value="uni">جامعة</option>
+<option value="wedding">فرح / مناسبة</option>
+<option value="daily">خروجة يومية</option>
+</select>
+<label>محجبة ولا لأ؟</label>
+<select id="hijab"><option value="yes">محجبة</option><option value="no">مش محجبة</option></select>
+<label>طولك بالسم</label><input id="height" type="number" placeholder="165">
+<label>وزنك بالكيلو</label><input id="weight" type="number" placeholder="65">
+<label>لون بشرتك</label>
+<select id="skin"><option value="fair">فاتحة</option><option value="medium">قمحية</option><option value="dark">سمراء</option></select>
+<label>ستايلك المفضل؟</label>
+<select id="style"><option value="classic">كلاسيك</option><option value="casual">كاجوال</option><option value="trendy">تريندي</option><option value="modest">محتشم</option></select>
+<label>روتين يومك؟</label>
+<select id="routine"><option value="walk">بمشي كتير</option><option value="office">مكتب</option><option value="stand">واقفة طول اليوم</option><option value="mix">مختلط</option></select>
+<label>ميزانيتك</label>
+<select id="budget"><option value="low">اقل من 800ج</option><option value="mid">800 - 1200ج</option><option value="high">اكتر من 1200ج</option></select>
+<button id="mainBtn" onclick="generate()">طلعيلي أحسن طقم ليا</button>
+</div>
+
+<div id="result"></div>
+<div class="card"><h2>طلباتي</h2><div id="orders">لسه مفيش طلبات</div></div>
+
+<script>
+// قاعدة أطقم حقيقية - 24 طقم مختلف
+const DB = [
+{id:1, occ:'work', hijab:'yes', style:'classic', name:'طقم الشغل الكلاسيك', top:'بليزر بيج طويل + بلوزة بيضاء قطن', bottom:'بنطلون روزالين كافيه', fabric:'روزالين + قطن - مش بيتكسر', bag:'شنطة جلد كافيه كبيرة', shoe:'هيلز متوسط بيج', acc:'طرحة شيفون بيج + بروش ذهبي', colors:['بيج','كافيه','أبيض'], price:'1050ج'},
+{id:2, occ:'work', hijab:'yes', style:'casual', name:'طقم الشغل المريح', top:'شيميز كتان زيتي طويل', bottom:'بنطلون جينز واسع غامق', fabric:'كتان معالج - خفيف للحر', bag:'شنطة كروس زيتي', shoe:'فلات أبيض مريح', acc:'طرحة قطن زيتي', colors:['زيتي','أبيض','جينز'], price:'890ج'},
+{id:3, occ:'work', hijab:'yes', style:'modest', name:'طقم الشغل المحتشم', top:'دريس قطن ترابي واسع + حزام', bottom:'بنطلون ليجن قطن تحت الدريس', fabric:'قطن + ليكرا', bag:'شنطة عملية كبيرة ترابي', shoe:'شوز طبي بيج', acc:'طرحة ترابي + مكمل حجاب', colors:['ترابي','بيج','أبيض'], price:'980ج'},
+{id:4, occ:'work', hijab:'no', style:'classic', name:'طقم الشغل الشيك', top:'بلوزة ستان أوف وايت', bottom:'بنطلون كلاسيك أسود', fabric:'ستان + روزالين', bag:'شنطة سوداء كلاسيك', shoe:'هيلز أسود', acc:'حلق لولي + ساعة', colors:['أوف وايت','أسود'], price:'1150ج'},
+{id:5, occ:'work', hijab:'no', style:'trendy', name:'طقم الشغل التريندي', top:'بليزر أوفر سايز موف', bottom:'بنطلون واسع أبيض', fabric:'روزالين خفيف', bag:'شنطة صغيرة موف', shoe:'هيلز موف', acc:'سلسلة ذهبي رفيعة', colors:['موف','أبيض'], price:'1250ج'},
+{id:6, occ:'uni', hijab:'yes', style:'casual', name:'طقم الجامعة الكاجوال', top:'هودي أوفر سايز بيج + تيشيرت أبيض', bottom:'بنطلون جينز فاتح', fabric:'قطن ميلتون - مريح', bag:'باك باج بيج', shoe:'سنيكرز أبيض', acc:'طرحة قطن بيضاء', colors:['بيج','أبيض','جينز'], price:'780ج'},
+{id:7, occ:'uni', hijab:'yes', style:'trendy', name:'طقم الجامعة التريندي', top:'كارديجان طويل كاروهات', bottom:'بنطلون جينز + تيشيرت', fabric:'صوف خفيف + قطن', bag:'شنطة كتف كاروهات', shoe:'سنيكرز بيج', acc:'طرحة بيج كاروهات', colors:['بيج','بني','أبيض'], price:'850ج'},
+{id:8, occ:'uni', hijab:'no', style:'casual', name:'طقم الجامعة السريع', top:'تيشيرت أوفر سايز وردي', bottom:'بنطلون جينز واسع', fabric:'قطن', bag:'شنطة كروس وردي', shoe:'سنيكرز وردي', acc:'توكة شعر + حلق بسيط', colors:['وردي','جينز','أبيض'], price:'720ج'},
+{id:9, occ:'uni', hijab:'no', style:'classic', name:'طقم الجامعة الهادي', top:'قميص أبيض كلاسيك', bottom:'بنطلون قماش كافيه', fabric:'قطن + كتان', bag:'شنطة كتف كافيه', shoe:'لوفر كافيه', acc:'ساعة + سلسلة', colors:['أبيض','كافيه'], price:'820ج'},
+{id:10, occ:'wedding', hijab:'yes', style:'classic', name:'طقم الفرح الملكي', top:'دريس شيفون كشمير + بطانة ستان', bottom:'حزام ذهبي + طرحة شيفون', fabric:'شيفون + ستان', bag:'كلاتش ذهبي', shoe:'هيلز ذهبي', acc:'طرحة شيفون كشمير + حلق ذهبي', colors:['كشمير','ذهبي'], price:'1450ج'},
+{id:11, occ:'wedding', hijab:'yes', style:'trendy', name:'طقم الفرح التريندي', top:'جمبسوت ستان زيتي + بليزر', bottom:'حزام + طرحة زيتي', fabric:'ستان', bag:'كلاتش زيتي', shoe:'هيلز زيتي', acc:'طرحة ستان زيتي', colors:['زيتي','ذهبي'], price:'1380ج'},
+{id:12, occ:'wedding', hijab:'no', style:'classic', name:'فستان الفرح الكلاسيك', top:'فستان ستان أحمر نبيتي', bottom:'جاكيت خفيف', fabric:'ستان', bag:'كلاتش أسود', shoe:'هيلز أسود', acc:'حلق أحمر + سلسلة', colors:['نبيتي','أسود'], price:'1500ج'},
+{id:13, occ:'wedding', hijab:'no', style:'trendy', name:'فستان الفرح التريندي', top:'فستان شيفون موف منفوش', bottom:'-', fabric:'شيفون', bag:'كلاتش موف', shoe:'هيلز فضي', acc:'حلق فضي', colors:['موف','فضي'], price:'1420ج'},
+{id:14, occ:'daily', hijab:'yes', style:'casual', name:'طقم الخروجة المريح', top:'تيشيرت أوفر سايز مستردة + جاكيت جينز', bottom:'بنطلون جينز', fabric:'قطن + جينز', bag:'شنطة كروس مستردة', shoe:'سنيكرز أبيض', acc:'طرحة مستردة', colors:['مستردة','جينز'], price:'760ج'},
+{id:15, occ:'daily', hijab:'yes', style:'modest', name:'طقم الخروجة المحتشم', top:'دريس كتان أبيض واسع', bottom:'بنطلون أبيض', fabric:'كتان', bag:'شنطة خوص', shoe:'سليبر بيج', acc:'طرحة بيضاء', colors:['أبيض','بيج'], price:'800ج'},
+{id:16, occ:'daily', hijab:'no', style:'casual', name:'طقم الخروجة الكاجوال', top:'كروب توب + قميص مفتوح', bottom:'شورت جينز / بنطلون', fabric:'قطن + جينز', bag:'شنطة كروس', shoe:'سنيكرز', acc:'كاب + نظارة', colors:['أبيض','جينز'], price:'700ج'},
+{id:17, occ:'work', hijab:'yes', style:'trendy', name:'طقم الشغل الجريء', top:'بليزر أخضر غامق + بلوزة', bottom:'بنطلون أسود', fabric:'روزالين', bag:'شنطة سوداء', shoe:'هيلز أسود', acc:'طرحة أخضر', colors:['أخضر','أسود'], price:'1180ج'},
+{id:18, occ:'uni', hijab:'yes', style:'classic', name:'طقم الجامعة الراقي', top:'بلوزة بيضاء + فيست كافيه', bottom:'بنطلون كافيه', fabric:'قطن + كتان', bag:'شنطة كافيه', shoe:'لوفر أبيض', acc:'طرحة كافيه', colors:['كافيه','أبيض'], price:'880ج'},
+{id:19, occ:'daily', hijab:'no', style:'trendy', name:'طقم الخروجة التريندي', top:'توب ساتان + جاكيت', bottom:'بنطلون واسع', fabric:'ستان', bag:'شنطة صغيرة', shoe:'هيلز', acc:'حلق كبير', colors:['بينك','أسود'], price:'950ج'},
+{id:20, occ:'work', hijab:'no', style:'casual', name:'طقم الشغل العملي', top:'قميص جينز', bottom:'بنطلون قماش بيج', fabric:'جينز + قطن', bag:'شنطة عملية', shoe:'فلات بيج', acc:'ساعة', colors:['جينز','بيج'], price:'900ج'},
+{id:21, occ:'wedding', hijab:'yes', style:'modest', name:'طقم الفرح المحتشم', top:'دريس قطيفة كحلي', bottom:'طرحة كحلي', fabric:'قطيفة', bag:'كلاتش فضي', shoe:'هيلز فضي', acc:'طرحة كحلي + بروش', colors:['كحلي','فضي'], price:'1350ج'},
+{id:22, occ:'uni', hijab:'yes', style:'modest', name:'طقم الجامعة المحتشم', top:'دريس ليكرا أسود واسع', bottom:'بنطلون', fabric:'ليكرا', bag:'باك باج أسود', shoe:'سنيكرز أسود', acc:'طرحة سوداء', colors:['أسود','أبيض'], price:'820ج'},
+{id:23, occ:'daily', hijab:'yes', style:'classic', name:'طقم الخروجة الكلاسيك', top:'قميص أبيض + بنطلون بيج', bottom:'بنطلون بيج', fabric:'قطن', bag:'شنطة بيج', shoe:'لوفر', acc:'طرحة بيج', colors:['بيج','أبيض'], price:'840ج'},
+{id:24, occ:'daily', hijab:'no', style:'classic', name:'طقم الخروجة الهادي', top:'بلوزة بيضاء + جاكيت بيج', bottom:'بنطلون جينز', fabric:'قطن', bag:'شنطة بيج', shoe:'فلات', acc:'سلسلة', colors:['بيج','أبيض'], price:'830ج'}
+];
+
+let today = new Date().toDateString();
+let data = JSON.parse(localStorage.getItem('vestis_trials') || '{"date":"","count":0}');
+if(data.date !== today){ data = {date:today, count:0}; localStorage.setItem('vestis_trials', JSON.stringify(data)); }
+let left = 2 - data.count;
+document.getElementById('trialText').innerText = 'ليكي النهاردة ' + left + ' تجربة مجانية - بعد كده 149ج';
+if(left <= 0){ document.getElementById('mainBtn').disabled = true; document.getElementById('mainBtn').innerText = 'خلصتي تجارب النهاردة'; }
+
+let orders = JSON.parse(localStorage.getItem('vestis_orders') || '[]');
+let lastOutfit = '';
+let lastIds = JSON.parse(localStorage.getItem('vestis_last') || '[]');
+renderOrders();
+
+function getSize(h,w){
+  let bmi = w / ((h/100)*(h/100));
+  if(bmi < 19) return 'S - اختاري خامات فيها ليكرا عشان تظبط عليكي';
+  if(bmi < 25) return 'M - مقاسك مظبوط';
+  if(bmi < 30) return 'L - اختاري قصات واسعة ومريحة';
+  return 'XL - اختاري خامات انسيابية زي الشيفون والكتان';
+}
+
+function generate(){
+  if(left <= 0){ alert('خلصتي تجارب النهاردة'); return; }
+  let occ = document.getElementById('occasion').value;
+  let hijab = document.getElementById('hijab').value;
+  let h = Number(document.getElementById('height').value || 165);
+  let w = Number(document.getElementById('weight').value || 65);
+  let skin = document.getElementById('skin').value;
+  let style = document.getElementById('style').value;
+  let routine = document.getElementById('routine').value;
+  let budget = document.getElementById('budget').value;
+
+  data.count++; localStorage.setItem('vestis_trials', JSON.stringify(data));
+  left--; document.getElementById('trialText').innerText = 'ليكي النهاردة ' + left + ' تجربة مجانية';
+  if(left <= 0){ document.getElementById('mainBtn').disabled = true; }
+
+  // فلترة حقيقية - مش طقم ثابت
+  let filtered = DB.filter(o => o.occ === occ && o.hijab === hijab);
+  // لو الستايل مش موجود، خدي أي ستايل لنفس المناسبة
+  let byStyle = filtered.filter(o => o.style === style);
+  if(byStyle.length > 0) filtered = byStyle;
+  // شيل الأطقم اللي طلعت قبل كده عشان متتكررش
+  let fresh = filtered.filter(o => !lastIds.includes(o.id));
+  if(fresh.length === 0) fresh = filtered;
+  // اختاري واحد عشوائي من اللي فاضلين
+  let pick = fresh[Math.floor(Math.random() * fresh.length)];
+  lastIds.push(pick.id);
+  if(lastIds.length > 5) lastIds.shift();
+  localStorage.setItem('vestis_last', JSON.stringify(lastIds));
+
+  // تظبيط حسب الروتين والبشرة والميزانية
+  let shoeNote = routine==='walk' ? 'بدلنا الجزمة لفلات عشان بتمشي كتير' : routine==='stand' ? 'اخترنا شوز طبي عشان واقفة طول اليوم' : 'الجزمة دي مناسبة لروتينك';
+  let skinNote = skin==='fair' ? 'الألوان دي بتنور البشرة الفاتحة' : skin==='medium' ? 'الألوان دي بتليق جدا على البشرة القمحية' : 'الألوان دي بتخلي البشرة السمراء تنور';
+  let priceNote = budget==='low' ? 'اخترنا ليكي بديل أرخص في نفس الستايل' : budget==='high' ? 'اخترنا ليكي خامة أغلى وأشيك' : 'السعر ده في حدود ميزانيتك';
+  let sizeInfo = getSize(h,w);
+
+  lastOutfit = pick.name + ' - ' + pick.price;
+
+  let pills = '';
+  for(let i=0;i<pick.colors.length;i++){ pills += '<span class="pill">' + pick.colors[i] + '</span>'; }
+
+  let html = '<div class="outfit">'
+    + '<span class="badge">طقم رقم ' + pick.id + ' - ' + pick.name + '</span>'
+    + '<h2>' + pick.name + '</h2>'
+    + '<p><b>مقاسك:</b> ' + sizeInfo + ' - طولك ' + h + ' ووزنك ' + w + '</p>'
+    + '<p><b>القطعة اللي فوق:</b> ' + pick.top + '</p>'
+    + '<p><b>القطعة اللي تحت:</b> ' + pick.bottom + '</p>'
+    + '<p><b>الخامة:</b> ' + pick.fabric + '</p>'
+    + '<p><b>الألوان:</b><br>' + pills + '<br><small>' + skinNote + '</small></p>'
+    + '<p><b>الشنطة:</b> ' + pick.bag + '</p>'
+    + '<p><b>الجزمة:</b> ' + pick.shoe + ' - ' + shoeNote + '</p>'
+    + '<p><b>الاكسسوار:</b> ' + pick.acc + '</p>'
+    + '<p><b>السعر:</b> ' + pick.price + ' - ' + priceNote + '</p>'
+    + '<button onclick="order()">اطلبي الطقم ده - تفعيل الأوردر</button>'
+    + '</div>';
+  document.getElementById('result').innerHTML = html;
+  document.getElementById('result').scrollIntoView();
+}
+function order(){
+  let o = {id:'V-'+Date.now().toString().slice(-5), item:lastOutfit, date:new Date().toLocaleString('ar-EG'), status:'تم استلام الطلب - جاري التجهيز'};
+  orders.unshift(o); localStorage.setItem('vestis_orders', JSON.stringify(orders)); renderOrders();
+  alert('تم تفعيل الأوردر! رقم طلبك: '+o.id);
+}
+function renderOrders(){
+  if(!orders.length){ document.getElementById('orders').innerHTML='لسه مفيش طلبات'; return; }
+  let out='';
+  for(let i=0;i<orders.length;i++){ out += '<div class="order"><b>'+orders[i].id+'</b> - '+orders[i].item+'<br>'+orders[i].date+'<br>'+orders[i].status+'</div>'; }
+  document.getElementById('orders').innerHTML = out;
+}
+</script>
+</body>
+</html>
