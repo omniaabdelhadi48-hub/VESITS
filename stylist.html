@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VESTIS - الاستايلست - النسخة النهائية</title>
+<style>
+*{box-sizing:border-box;font-family:'Segoe UI',Tahoma}
+body{margin:0;background:#FFF5F8;color:#222;padding:14px}
+.header{background:#1A1A2E;color:#fff;padding:18px;border-radius:18px;text-align:center}
+.header b{color:#E94B8A}
+.big{border:2px solid #E94B8A;background:#fff;border-radius:18px;padding:18px;margin:12px 0;cursor:pointer;text-align:center}
+.big.sel{background:#E94B8A;color:#fff}
+.big.sel p{color:#fff}
+.card{background:#fff;border:1px solid #FFD1E3;border-radius:16px;padding:16px;margin:12px 0}
+select,input,textarea{width:100%;padding:13px;border-radius:12px;border:1px solid #ddd;font-size:16px;margin:6px 0}
+button{background:#E94B8A;color:#fff;border:0;padding:14px;width:100%;border-radius:12px;font-size:17px;font-weight:bold;margin-top:10px;cursor:pointer}
+.pill{display:inline-block;background:#FFE0EE;padding:5px 10px;border-radius:20px;margin:3px;font-size:13px}
+.shop{background:#E8F8F0;border:1px solid #2ecc71;border-radius:14px;padding:14px;margin:10px 0}
+.hidden{display:none}
+.outfit{background:#fff;border-radius:16px;padding:14px;margin:10px 0;box-shadow:0 4px 14px #0001}
+</style>
+</head>
+<body>
+<div class="header"><h2>💖 VESTIS - <b>الاستايلست</b></h2><p>انتي اختاري الطريقة اللي عايزة الاستايلست يكلمك بيها النهاردة</p><p>ليكي 2 تجربة مجانية كل يوم</p></div>
+
+<div class="card">
+<h3>اختاري طريقة النهاردة 👇</h3>
+<div class="big sel" id="mode1Btn" onclick="chooseMode(1)">
+<h3>👗 الطريقة 1 - نسقي من دولابي</h3>
+<p>قوليلي ايه اللي عندك في دولابك، وانا أنسقهولك وأقولك ناقصك ايه</p>
+</div>
+<div class="big" id="mode2Btn" onclick="chooseMode(2)">
+<h3>✨ الطريقة 2 - اختاريلي طقم جديد</h3>
+<p>قوليلي بتحبي ايه؟ وزنك؟ طولك؟ واطلعلك 3 أطقم جديدة + أقرب محل فيه ذوقك</p>
+</div>
+</div>
+
+<!-- الطريقة 1 -->
+<div id="mode1Box" class="card">
+<h3>👗 قوليلي ايه اللي في دولابك؟</h3>
+<label>رايحة فين؟</label>
+<select id="c_occ"><option value="work">عمل / شغل</option><option value="uni">جامعة</option><option value="wedding">فرح</option><option value="daily">خروجة</option></select>
+<label>محجبة ولا لأ؟</label>
+<select id="c_hijab"><option value="yes">محجبة</option><option value="no">مش محجبة</option></select>
+<label>اكتبي اللي عندك في دولابك - كل قطعة في سطر</label>
+<textarea id="closet" rows="4" placeholder="مثال:
+بنطلون جينز غامق
+بلوزة بيضاء
+طرحة بيج
+شنطة سوداء"></textarea>
+<label>ايه ذوقك؟ بتحبي ايه؟</label>
+<input id="c_like" placeholder="مثال: بحب الكلاسيك والألوان الهادية">
+<label>ستايلك؟</label>
+<select id="c_style"><option value="classic">كلاسيك</option><option value="casual">كاجوال</option><option value="trendy">تريندي</option><option value="modest">محتشم</option></select>
+<label>فين مكانك؟</label>
+<select id="c_area"><option value="matay">مطاي - المنيا</option><option value="aswan">أسوان</option><option value="minya">المنيا</option><option value="cairo">القاهرة</option></select>
+<button onclick="styleFromCloset()">نسقيلي من دولابي ✨</button>
+</div>
+
+<!-- الطريقة 2 -->
+<div id="mode2Box" class="card hidden">
+<h3>✨ اختاريلي طقم جديد</h3>
+<label>رايحة فين؟</label>
+<select id="n_occ"><option value="work">عمل / شغل</option><option value="uni">جامعة</option><option value="wedding">فرح</option><option value="daily">خروجة</option></select>
+<label>محجبة ولا لأ؟</label>
+<select id="n_hijab"><option value="yes">محجبة</option><option value="no">مش محجبة</option></select>
+<label>ايه ذوقك؟ بتحبي ايه؟</label>
+<input id="n_like" placeholder="مثال: بحب التريندي والألوان الجريئة">
+<label>طولك</label><input id="n_h" type="number" placeholder="165">
+<label>وزنك</label><input id="n_w" type="number" placeholder="65">
+<label>لون بشرتك</label>
+<select id="n_skin"><option value="fair">فاتحة</option><option value="medium">قمحية</option><option value="dark">سمراء</option></select>
+<label>ستايلك؟</label>
+<select id="n_style"><option value="classic">كلاسيك</option><option value="casual">كاجوال</option><option value="trendy">تريندي</option><option value="modest">محتشم</option></select>
+<label>روتينك؟</label>
+<select id="n_routine"><option value="walk">بمشي كتير</option><option value="office">مكتب</option><option value="stand">واقفة طول اليوم</option></select>
+<label>ميزانيتك</label>
+<select id="n_budget"><option value="low">اقل من 800ج</option><option value="mid">800 - 1200ج</option><option value="high">اكتر من 1200ج</option></select>
+<label>فين مكانك؟</label>
+<select id="n_area"><option value="matay">مطاي - المنيا</option><option value="aswan">أسوان</option><option value="minya">المنيا</option><option value="cairo">القاهرة</option></select>
+<button onclick="styleNew()">طلعيلي 3 أطقم جديدة ✨</button>
+</div>
+
+<div id="result"></div>
+<div class="card"><h3>طلباتي</h3><div id="orders">لسه مفيش طلبات</div></div>
+
+<script>
+let mode = 1;
+let orders = JSON.parse(localStorage.getItem('vestis_orders')||'[]');
+renderOrders();
+
+function chooseMode(m){
+  mode = m;
+  document.getElementById('mode1Btn').classList.toggle('sel', m===1);
+  document.getElementById('mode2Btn').classList.toggle('sel', m===2);
+  document.getElementById('mode1Box').classList.toggle('hidden', m!==1);
+  document.getElementById('mode2Box').classList.toggle('hidden', m!==2);
+  document.getElementById('result').innerHTML = '';
+}
+
+// محلاتنا - على حسب المكان + الذوق
+const SHOPS = {
+  matay_classic: {name:'بوتيك نور - مطاي - قسم الكلاسيك', addr:'شارع الجمهورية - مطاي', dist:'2.1 كم منك', phone:'0100-111-2222'},
+  matay_casual: {name:'بوتيك نور - مطاي - قسم الكاجوال', addr:'شارع الجمهورية - مطاي', dist:'2.1 كم منك', phone:'0100-111-2222'},
+  matay_trendy: {name:'بوتيك نور - مطاي - قسم التريندي', addr:'شارع الجمهورية - مطاي', dist:'2.1 كم منك', phone:'0100-111-2222'},
+  matay_modest: {name:'بوتيك نور - مطاي - قسم المحتشم', addr:'شارع الجمهورية - مطاي', dist:'2.1 كم منك', phone:'0100-111-2222'},
+  aswan_classic: {name:'بوتيك أسوان ستايل - قسم الكلاسيك', addr:'كورنيش النيل - أسوان', dist:'1.4 كم منك', phone:'0111-222-3333'},
+  aswan_casual: {name:'بوتيك أسوان ستايل - قسم الكاجوال', addr:'كورنيش النيل - أسوان', dist:'1.4 كم منك', phone:'0111-222-3333'},
+  aswan_trendy: {name:'بوتيك أسوان ستايل - قسم التريندي', addr:'كورنيش النيل - أسوان', dist:'1.4 كم منك', phone:'0111-222-3333'},
+  aswan_modest: {name:'بوتيك أسوان ستايل - قسم المحتشم', addr:'كورنيش النيل - أسوان', dist:'1.4 كم منك', phone:'0111-222-3333'},
+  minya_classic: {name:'بوتيك المنيا - قسم الكلاسيك', addr:'شارع طه حسين - المنيا', dist:'3 كم منك', phone:'0122-333-4444'},
+  minya_casual: {name:'بوتيك المنيا - قسم الكاجوال', addr:'شارع طه حسين - المنيا', dist:'3 كم منك', phone:'0122-333-4444'},
+  minya_trendy: {name:'بوتيك المنيا - قسم التريندي', addr:'شارع طه حسين - المنيا', dist:'3 كم منك', phone:'0122-333-4444'},
+  minya_modest: {name:'بوتيك المنيا - قسم المحتشم', addr:'شارع طه حسين - المنيا', dist:'3 كم منك', phone:'0122-333-4444'},
+  cairo_classic: {name:'بوتيك القاهرة - قسم الكلاسيك', addr:'عباس العقاد - مدينة نصر', dist:'4.5 كم منك', phone:'0155-444-5555'},
+  cairo_casual: {name:'بوتيك القاهرة - قسم الكاجوال', addr:'عباس العقاد - مدينة نصر', dist:'4.5 كم منك', phone:'0155-444-5555'},
+  cairo_trendy: {name:'بوتيك القاهرة - قسم التريندي', addr:'عباس العقاد - مدينة نصر', dist:'4.5 كم منك', phone:'0155-444-5555'},
+  cairo_modest: {name:'بوتيك القاهرة - قسم المحتشم', addr:'عباس العقاد - مدينة نصر', dist:'4.5 كم منك', phone:'0155-444-5555'}
+};
+
+function shopHTML(area, style, like){
+  let key = area + '_' + style;
+  if(!SHOPS[key]) key = area + '_classic';
+  if(!SHOPS[key]) key = 'matay_classic';
+  let s = SHOPS[key];
+  return '<div class="shop"><b>📍 أقرب محل ليكي فيه نفس ذوقك بالظبط:</b><br><b>'+s.name+'</b><br>'+s.addr+'<br>المسافة: '+s.dist+'<br>رقم المحل: '+s.phone+'<br><small>ذوقك اللي قولتيه: '+like+' - ستايلك: '+style+'<br>قوليلهم في المحل: انا جاية من VESTIS عشان يجهزولك نفس الستايل</small></div>';
+}
+
+function styleFromCloset(){
+  let occ = document.getElementById('c_occ').value;
+  let hijab = document.getElementById('c_hijab').value;
+  let closet = document.getElementById('closet').value || 'بنطلون جينز - بلوزة بيضاء';
+  let like = document.getElementById('c_like').value || 'ستايل هادي';
+  let style = document.getElementById('c_style').value;
+  let area = document.getElementById('c_area').value;
+  let occText = occ==='work'?'للشغل':occ==='uni'?'للجامعة':occ==='wedding'?'للفرح':'للخروجة';
+  let missing = '';
+  let add = '';
+  if(hijab==='yes' && closet.indexOf('طرحة')===-1){ missing = 'ناقصك طرحة بلون من ألوان الطقم'; add = 'طرحة شيفون بيج - 180ج'; }
+  else if(closet.indexOf('شنطة')===-1){ missing = 'ناقصك شنطة تكمل الطقم'; add = 'شنطة كروس عملية - 320ج'; }
+  else { missing = 'الطقم ناقصه اكسسوار بسيط بس'; add = 'حلق بسيط أو بروش - 120ج'; }
+  let html = '<div class="outfit"><h3>👗 تنسيق من دولابك - '+occText+'</h3>'
+    + '<p><b>اللي عندك في دولابك:</b><br>'+closet.replace(/\n/g,'<br>')+'</p>'
+    + '<p><b>ذوقك اللي قولتيه:</b> '+like+'</p>'
+    + '<p><b>التنسيق:</b> البسي القطع دي مع بعض، هتطلع شيك جدا '+occText+'، ولو ظبطتي الطرحة / الاكسسوار بالطريقة دي هتبان أطول وأشيك.</p>'
+    + '<p><b>⚠️ ناقصك:</b> '+missing+'</p>'
+    + '<p><b>هاتيه من المحل:</b> '+add+'</p>'
+    + shopHTML(area, style, like)
+    + '<button onclick="order(\'تنسيق من دولابي - '+occText+'\')">اطلبي القطعة الناقصة</button></div>';
+  document.getElementById('result').innerHTML = html;
+  document.getElementById('result').scrollIntoView();
+}
+
+function styleNew(){
+  let occ = document.getElementById('n_occ').value;
+  let hijab = document.getElementById('n_hijab').value;
+  let like = document.getElementById('n_like').value || 'كاجوال';
+  let h = document.getElementById('n_h').value || 165;
+  let w = document.getElementById('n_w').value || 65;
+  let skin = document.getElementById('n_skin').value;
+  let style = document.getElementById('n_style').value;
+  let routine = document.getElementById('n_routine').value;
+  let budget = document.getElementById('n_budget').value;
+  let area = document.getElementById('n_area').value;
+  let base = hijab==='yes' ? 'بلوزة طويلة + بنطلون واسع + طرحة' : 'بلوزة + بنطلون';
+  let outfits = [
+    {name:'الطقم الأول - الكلاسيك', top: base + ' - بيج وكافيه', price:'1050ج', bag:'شنطة جلد كافيه', shoe: routine==='walk'?'فلات مريح':'هيلز متوسط', acc:'بروش ذهبي'},
+    {name:'الطقم التاني - الكاجوال', top: base + ' - زيتي وأبيض', price:'890ج', bag:'شنطة كروس زيتي', shoe:'سنيكرز أبيض', acc:'طرحة قطن'},
+    {name:'الطقم التالت - التريندي', top: base + ' - موف وأبيض', price:'1250ج', bag:'شنطة صغيرة موف', shoe:'هيلز موف', acc:'سلسلة ذهبي'}
+  ];
+  let skinNote = skin==='fair'?'الألوان دي بتنور بشرتك الفاتحة':skin==='medium'?'الألوان دي بتليق على القمحية':'الألوان دي بتنور السمراء';
+  let budgetNote = budget==='low'?'اخترنا بدائل أرخص في نفس ذوقك':budget==='high'?'اخترنا خامات أغلى وأشيك':'السعر في حدود ميزانيتك';
+  let html = '<h3>✨ 3 أطقم جديدة ليكي</h3><p><b>ذوقك:</b> '+like+' - <b>طولك:</b> '+h+' - <b>وزنك:</b> '+w+' - '+skinNote+' - '+budgetNote+'</p>';
+  outfits.forEach(function(o){
+    html += '<div class="outfit"><h3>'+o.name+'</h3><p><b>الطقم:</b> '+o.top+'</p><p><b>الشنطة:</b> '+o.bag+' | <b>الجزمة:</b> '+o.shoe+' | <b>الاكسسوار:</b> '+o.acc+'</p><p><b>السعر:</b> '+o.price+'</p><button onclick="order(\''+o.name+' - '+o.price+'\')">اطلبي الطقم ده</button></div>';
+  });
+  html += shopHTML(area, style, like);
+  document.getElementById('result').innerHTML = html;
+  document.getElementById('result').scrollIntoView();
+}
+
+function order(item){
+  let o={id:'V-'+Date.now().toString().slice(-5), item:item, date:new Date().toLocaleString('ar-EG'), status:'تم استلام الطلب'};
+  orders.unshift(o); localStorage.setItem('vestis_orders', JSON.stringify(orders)); renderOrders();
+  alert('تم تفعيل الأوردر! رقمك: '+o.id);
+}
+function renderOrders(){
+  if(!orders.length){ document.getElementById('orders').innerHTML='لسه مفيش طلبات'; return; }
+  document.getElementById('orders').innerHTML = orders.map(function(o){ return '<div style="background:#E8F8F0;padding:10px;border-radius:10px;margin:6px 0"><b>'+o.id+'</b> - '+o.item+'<br>'+o.date+'</div>'; }).join('');
+}
+</script>
+</body>
+</html>
