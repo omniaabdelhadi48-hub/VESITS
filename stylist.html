@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VESTIS - الاستايلست الذكي</title>
+<style>
+*{box-sizing:border-box;font-family:'Segoe UI',Tahoma}
+body{margin:0;background:#FFF5F8;color:#222;padding:12px}
+.header{background:#1A1A2E;color:#fff;padding:18px;border-radius:18px;text-align:center}
+.header b{color:#E94B8A}
+.big{border:2px solid #E94B8A;background:#fff;border-radius:18px;padding:16px;margin:10px 0;cursor:pointer;text-align:center}
+.big.sel{background:#E94B8A;color:#fff}
+.big.sel p{color:#fff}
+.card{background:#fff;border:1px solid #FFD1E3;border-radius:16px;padding:16px;margin:12px 0}
+select,input,textarea{width:100%;padding:12px;border-radius:12px;border:1px solid #ddd;font-size:15px;margin:6px 0}
+button{background:#E94B8A;color:#fff;border:0;padding:13px;width:100%;border-radius:12px;font-size:16px;font-weight:bold;margin-top:8px;cursor:pointer}
+button.sec{background:#1A1A2E}
+button.ghost{background:#fff;color:#E94B8A;border:2px solid #E94B8A}
+button.gold{background:#E8B84B;color:#000}
+button.sos{background:#FF2D55}
+.shop{background:#E8F8F0;border:1px solid #2ecc71;border-radius:14px;padding:14px;margin:10px 0}
+.hidden{display:none}
+.outfit{background:#fff;border-radius:16px;padding:14px;margin:10px 0;box-shadow:0 4px 14px #0001}
+.outfit img{width:100%;border-radius:14px;margin:10px 0;object-fit:cover}
+.colorBtn{width:42px;height:42px;border-radius:50%;border:3px solid #fff;box-shadow:0 2px 6px #0003;cursor:pointer;display:inline-block;margin:4px}
+.colorBtn.sel{border:3px solid #1A1A2E;transform:scale(1.15)}
+.badge{display:inline-block;background:#1A1A2E;color:#fff;padding:4px 10px;border-radius:20px;font-size:12px}
+.pill{display:inline-block;background:#FFE0EE;padding:6px 12px;border-radius:20px;margin:3px;font-size:13px}
+.photoBox{border:2px dashed #E94B8A;border-radius:16px;padding:12px;text-align:center;background:#FFF0F6}
+.photoBox img{width:100%;border-radius:12px;margin-top:10px}
+.trendCard{background:#FFF0F6;padding:12px;border-radius:12px;margin:8px 0}
+.weekDay{background:#FFF0F6;border-radius:12px;padding:10px;margin:6px 0}
+.moodBtn{padding:10px 14px;border-radius:20px;border:2px solid #ddd;background:#fff;cursor:pointer;margin:3px;display:inline-block}
+.moodBtn.sel{border-color:#E94B8A;background:#FFE0EE}
+.star{font-size:28px;cursor:pointer}
+.clearance{background:#FFF3CD;border:1px solid #E8B84B;border-radius:14px;padding:14px;margin:10px 0}
+</style>
+</head>
+<body>
+<div class="header">
+<h2>💖 VESTIS - <b>الاستايلست الذكي</b></h2>
+<p id="welcome">تحبي نعمل إيه النهاردة؟</p>
+<p>⭐ نقاطك: <b id="points">120</b> نقطة | 🔥 تحدي النهاردة: نسقي طقم باللون الزيتي</p>
+<p id="weatherLine">🌤️ طقس النهاردة: 28° - مشمس - هنختار خامات خفيفة</p>
+</div>
+
+<div class="card">
+<h3>1️⃣ تحبي نعمل إيه النهاردة؟</h3>
+<div class="big sel" id="m1" onclick="choose(1)"><h3>👗 نسقي من دولابي</h3><p>صوري لبسك بالكاميرا أو اختاري من دولابك المحفوظ، وهنحلل لون وشكل كل قطعة ونبني طقم كامل</p></div>
+<div class="big" id="m2" onclick="choose(2)"><h3>🛍️ اشتري طقم جديد / كملي الناقص</h3><p>عندك قطعة مش عارفة تنسقيها؟ أو عايزة طقم جديد بالكامل؟ هنقترحلك قطع ونوجهك لأقرب محل فيه القطع دي وتروحي تاخديها</p></div>
+<div class="big" id="m3" onclick="choose(3)"><h3>🔥 تريندات النهاردة من انستجرام وتيك توك</h3><p>هنعرضلك أحدث الصيحات، وبعدين نسألك: عندك قطع شبهها في دولابك ولا تشتري جديد؟</p></div>
+<button class="sos" onclick="sosMode()">🚨 SOS - عندي مناسبة مفاجئة بعد ساعة! أنقذيني</button>
+</div>
+
+<div class="card">
+<h3>🌤️ طقس ومزاج النهاردة؟</h3>
+<label>حاسة بايه النهاردة؟</label><br>
+<span class="moodBtn sel" id="mood-comfy" onclick="pickMood('comfy')">😌 مريحة</span>
+<span class="moodBtn" id="mood-work" onclick="pickMood('work')">💼 عملية</span>
+<span class="moodBtn" id="mood-happy" onclick="pickMood('happy')">💃 مبهجة</span>
+<span class="moodBtn" id="mood-chic" onclick="pickMood('chic')">✨ شيك</span>
+<p id="moodText">مزاجك: مريحة - هنختار خامات قطن وكتان واسعة ومريحة</p>
+<label>درجة حرارة النهاردة</label>
+<select id="weather" onchange="updateWeather()"><option value="hot">حر - فوق 30°</option><option value="warm" selected>دافي - 25° - 30°</option><option value="cold">برد - تحت 20°</option></select>
+</div>
+
+<div class="card">
+<h3>2️⃣ بروفايلك الذكي - بيتسجل مرة واحدة ومش هنسألك تاني كل يوم</h3>
+<label>رايحة فين؟</label><select id="occ"><option value="work">عمل / شغل</option><option value="uni">جامعة</option><option value="wedding">فرح</option><option value="daily">خروجة</option></select>
+<label>محجبة ولا لأ؟ - ده بيغير كل الطقم</label><select id="hijab" onchange="saveProfile()"><option value="yes">محجبة 🧕 - كله طويل ومقفول ومحتشم</option><option value="no">مش محجبة</option></select>
+<label>ذوقك؟ بتحبي ايه؟</label><input id="like" placeholder="بحب الكلاسيك الهادي" onchange="saveProfile()">
+<label>طولك</label><input id="h" type="number" placeholder="165" onchange="saveProfile()">
+<label>وزنك</label><input id="w" type="number" placeholder="65" onchange="saveProfile()">
+<label>شكل جسمك؟</label><select id="body" onchange="saveProfile()"><option value="pear">كمثري - الوسط أصغر والجناب أعرض</option><option value="apple">تفاحة - البطن أعرض</option><option value="hour">ساعة رملية - الوسط رفيع</option><option value="rect">مستطيل - الجسم مستقيم</option></select>
+<label>لون بشرتك</label><select id="skin" onchange="saveProfile()"><option value="fair">فاتحة</option><option value="medium">قمحية</option><option value="dark">سمراء</option></select>
+<label>ستايلك المفضل</label><select id="style" onchange="saveProfile()"><option value="classic">كلاسيك</option><option value="casual">كاجوال</option><option value="trendy">عصري / تريندي</option><option value="modest">محتشم</option></select>
+<label>روتينك؟</label><select id="routine"><option value="walk">بمشي كتير</option><option value="office">مكتب</option><option value="stand">واقفة طول اليوم</option></select>
+<h3>🎨 لوحة الألوان - اختاري ألوانك النهاردة بنفسك</h3>
+<p>اللون الأساسي:</p><div id="mainColors"></div>
+<p>اللون التاني:</p><div id="secondColors"></div>
+<p id="colorText">اخترتي: بيج + أبيض</p>
+<label>🌍 فين مكانك؟ اختاري بلدك ومحافظتك</label>
+<select id="area" onchange="saveProfile()">
+<optgroup label="🇪🇬 مصر - كل المحافظات الـ 27">
+<option value="matay">مطاي - المنيا</option>
+<option value="cairo">القاهرة</option>
+<option value="giza">الجيزة</option>
+<option value="alex">الإسكندرية</option>
+<option value="dakahlia">الدقهلية - المنصورة</option>
+<option value="redsea">البحر الأحمر - الغردقة</option>
+<option value="beheira">البحيرة - دمنهور</option>
+<option value="fayoum">الفيوم</option>
+<option value="gharbia">الغربية - طنطا</option>
+<option value="ismailia">الإسماعيلية</option>
+<option value="menofia">المنوفية - شبين الكوم</option>
+<option value="minya">المنيا</option>
+<option value="qalyubia">القليوبية - بنها</option>
+<option value="newvalley">الوادي الجديد - الخارجة</option>
+<option value="northsinai">شمال سيناء - العريش</option>
+<option value="portsaid">بورسعيد</option>
+<option value="qena">قنا</option>
+<option value="southsinai">جنوب سيناء - شرم الشيخ</option>
+<option value="sohag">سوهاج</option>
+<option value="suez">السويس</option>
+<option value="aswan">أسوان</option>
+<option value="asyut">أسيوط</option>
+<option value="benisuef">بني سويف</option>
+<option value="damietta">دمياط</option>
+<option value="luxor">الأقصر</option>
+<option value="kafr">كفر الشيخ</option>
+<option value="matrouh">مطروح</option>
+<option value="sharqia">الشرقية - الزقازيق</option>
+</optgroup>
+<optgroup label="🌍 الوطن العربي - كل الدول الـ 22">
+<option value="algeria">الجزائر - الجزائر العاصمة</option>
+<option value="bahrain">البحرين - المنامة</option>
+<option value="comoros">جزر القمر - موروني</option>
+<option value="djibouti">جيبوتي - جيبوتي</option>
+<option value="iraq">العراق - بغداد</option>
+<option value="jordan">الأردن - عمّان</option>
+<option value="kuwait">الكويت - مدينة الكويت</option>
+<option value="lebanon">لبنان - بيروت</option>
+<option value="libya">ليبيا - طرابلس</option>
+<option value="mauritania">موريتانيا - نواكشوط</option>
+<option value="morocco">المغرب - الدار البيضاء</option>
+<option value="oman">عُمان - مسقط</option>
+<option value="palestine">فلسطين - رام الله / غزة</option>
+<option value="qatar">قطر - الدوحة</option>
+<option value="saudi_riyadh">السعودية - الرياض</option>
+<option value="saudi_jeddah">السعودية - جدة</option>
+<option value="saudi_makkah">السعودية - مكة</option>
+<option value="saudi_madina">السعودية - المدينة</option>
+<option value="saudi_dammam">السعودية - الدمام</option>
+<option value="somalia">الصومال - مقديشو</option>
+<option value="sudan">السودان - الخرطوم</option>
+<option value="syria">سوريا - دمشق</option>
+<option value="tunisia">تونس - تونس العاصمة</option>
+<option value="uae_dubai">الإمارات - دبي</option>
+<option value="uae_abudhabi">الإمارات - أبوظبي</option>
+<option value="uae_sharjah">الإمارات - الشارقة</option>
+<option value="uae_ajman">الإمارات - عجمان</option>
+<option value="yemen">اليمن - صنعاء / عدن</option>
+</optgroup>
+</select>
+<button class="sec" onclick="saveProfile()">💾 احفظي بروفايلي - مش هسألك تاني</button>
+</div>
+
+<div class="card">
+<h3>📸 صوري اللبس واحنا ننسق - أو اختاري من دولابك المحفوظ</h3>
+<div class="photoBox">
+<input type="file" id="photoInput" accept="image/*" capture="environment" onchange="onPhoto(this)" style="display:none">
+<button class="sec" onclick="document.getElementById('photoInput').click()">📸 صوري القطعة بالكاميرا</button>
+<button class="ghost" onclick="document.getElementById('photoInput').click()">🖼️ اختاري من الاستوديو</button>
+<div id="photoPreview"></div>
+<input id="photoDesc" placeholder="مثال: جيبة ترابي - طويلة - كتان - مش عارفة ألبس عليها ايه">
+<p id="photoNote" style="font-size:13px;color:#888"></p>
+</div>
+<div id="savedCloset"></div>
+</div>
+
+<div class="card" style="border:2px solid #000">
+<h3>🔥 تريندات النهاردة من انستجرام وتيك توك بس</h3>
+<div id="socialTrends"></div>
+<button class="sec" onclick="refreshTrends()">🔄 هاتي تريند جديد من انستجرام وتيك توك</button>
+<p style="font-size:13px">بعد ما تشوفي التريند: عندك قطع شبهه في دولابك؟ ولا تشتري جديد؟</p>
+<button class="ghost" onclick="choose(1)">عندي شبهه في دولابي - نسقيهولي</button>
+<button onclick="choose(2)">لا، عايزة اشتري الجديد</button>
+</div>
+
+<div id="box1" class="card"><h3>👗 اللي في دولابك</h3><textarea id="closet" rows="3" placeholder="بنطلون جينز غامق - واسع&#10;بلوزة بيضاء - طويلة - بكم&#10;طرحة بيج - شيفون"></textarea><input id="hardPiece" placeholder="فيه قطعة مش عارفة تنسقيها؟ اكتبيها هنا"><button onclick="run(1)">نسقيلي من دولابي ✨</button></div>
+<div id="box2" class="card hidden"><h3>🛍️ اشتري جديد / كملي الناقص</h3><select id="budget"><option value="low">اقل من 800</option><option value="mid">800 - 1200</option><option value="high">اكتر من 1200</option></select><button onclick="run(2)">طلعيلي طقم جديد ✨</button></div>
+<div id="box3" class="card hidden"><h3>🔥 تريندي</h3><button onclick="run(3)">اقترحي عليا تريندي 🔥</button></div>
+
+<div id="result"></div>
+
+<div class="card">
+<h3>📅 جدول أطقم الأسبوع - خططي من دلوقتي</h3>
+<div id="weekPlan"></div>
+<button class="gold" onclick="planWeek()">✨ خططيلي أطقم الأسبوع كله</button>
+</div>
+
+<div class="card"><h3>📍 حجوزاتي من المحلات | ⭐ نقاطي</h3><p style="font-size:13px">دي حجوزات من المحلات، مش طلبات أونلاين، بتروحي تاخديها بنفسك - إلا التصفيات بس</p><div id="orders">لسه مفيش حجوزات</div><button class="gold" onclick="usePoints()">استبدلي نقاطك بخصم 🎁</button></div>
+
+<script>
+let curMode=1, currentIndex=0, currentList=[], uploadedPhoto='', trendIndex=0, mood='comfy';
+let chosenMain='بيج', chosenSecond='أبيض';
+let points=parseInt(localStorage.getItem('vestis_points')||'120');
+let orders=JSON.parse(localStorage.getItem('vestis_orders')||'[]');
+let savedCloset=JSON.parse(localStorage.getItem('vestis_closet')||'[]');
+document.getElementById('points').innerText=points;
+renderOrders(); loadProfile(); renderSavedCloset(); renderStars(); loadFromLink();
+
+function saveProfile(){
+let p={hijab:document.getElementById('hijab').value, like:document.getElementById('like').value, h:document.getElementById('h').value, w:document.getElementById('w').value, body:document.getElementById('body').value, skin:document.getElementById('skin').value, style:document.getElementById('style').value, area:document.getElementById('area').value};
+localStorage.setItem('vestis_profile', JSON.stringify(p));
+alert('تم حفظ بروفايلك 💖 - مش هنسألك تاني');
+}
+function loadProfile(){
+let p=JSON.parse(localStorage.getItem('vestis_profile')||'{}');
+if(p.hijab) document.getElementById('hijab').value=p.hijab;
+if(p.like) document.getElementById('like').value=p.like;
+if(p.h) document.getElementById('h').value=p.h;
+if(p.w) document.getElementById('w').value=p.w;
+if(p.body) document.getElementById('body').value=p.body;
+if(p.skin) document.getElementById('skin').value=p.skin;
+if(p.style) document.getElementById('style').value=p.style;
+if(p.area) document.getElementById('area').value=p.area;
+}
+function pickMood(m){
+mood=m;
+['comfy','work','happy','chic'].forEach(function(x){document.getElementById('mood-'+x).classList.toggle('sel', x===m);});
+let t=m==='comfy'?'مريحة - هنختار خامات قطن وكتان واسعة ومريحة':m==='work'?'عملية - هنختار طقم عملي وشوز مريح':m==='happy'?'مبهجة - هنختار ألوان فاتحة ومبهجة':'شيك - هنختار طقم شيك وهيلز';
+document.getElementById('moodText').innerText='مزاجك: '+t;
+}
+function updateWeather(){
+let w=document.getElementById('weather').value;
+let t=w==='hot'?'🌡️ حر جدا - هنختار كتان وقطن خفيف وألوان فاتحة':w==='warm'?'🌤️ دافي - هنختار خامات خفيفة':'❄️ برد - هنختار خامات تقيلة وكارديجان طويل';
+document.getElementById('weatherLine').innerText=t;
+}
+const COLORS=[{name:'بيج',hex:'#D2B48C'},{name:'أبيض',hex:'#FFFFFF'},{name:'أسود',hex:'#222222'},{name:'زيتي',hex:'#6B7F59'},{name:'كافيه',hex:'#8B5A2B'},{name:'موف',hex:'#9B7EBD'},{name:'وردي',hex:'#F2A0B5'},{name:'سماوي',hex:'#A8D8EA'},{name:'ترابي',hex:'#C08A5A'},{name:'مستردة',hex:'#E8B84B'}];
+function renderColors(){
+document.getElementById('mainColors').innerHTML=COLORS.map(function(c){return '<span class="colorBtn '+(chosenMain===c.name?'sel':'')+'" style="background:'+c.hex+'" onclick="pickMain(\''+c.name+'\')"></span>';}).join('');
+document.getElementById('secondColors').innerHTML=COLORS.map(function(c){return '<span class="colorBtn '+(chosenSecond===c.name?'sel':'')+'" style="background:'+c.hex+'" onclick="pickSecond(\''+c.name+'\')"></span>';}).join('');
+document.getElementById('colorText').innerHTML='اخترتي: <b>'+chosenMain+' + '+chosenSecond+'</b> - الطقم كله هيبقى بالألوان دي';
+}
+function pickMain(n){chosenMain=n;renderColors(); if(currentList.length) showCurrent(curMode);}
+function pickSecond(n){chosenSecond=n;renderColors(); if(currentList.length) showCurrent(curMode);}
+renderColors();
+function choose(m){curMode=m;[1,2,3].forEach(function(i){document.getElementById('m'+i).classList.toggle('sel',i===m);document.getElementById('box'+i).classList.toggle('hidden',i!==m);});document.getElementById('result').innerHTML='';currentList=[];currentIndex=0;}
+function sosMode(){alert('🚨 وضع الطوارئ اتفعل! هنطلعلك طقم جاهز في دقيقة، محتشم، شيك، ومتاح في أقرب محل ليكي'); document.getElementById('occ').value='wedding'; document.getElementById('style').value='classic'; run(2);}
+function onPhoto(input){
+let file=input.files[0]; if(!file) return;
+let reader=new FileReader();
+reader.onload=function(e){
+uploadedPhoto=e.target.result;
+let desc=document.getElementById('photoDesc').value||'قطعة من دولابي';
+savedCloset.push({img:uploadedPhoto, desc:desc, date:new Date().toLocaleDateString('ar-EG')});
+localStorage.setItem('vestis_closet', JSON.stringify(savedCloset));
+document.getElementById('photoPreview').innerHTML='<img src="'+uploadedPhoto+'"><p style="color:green">✅ اتصورت واتحفظت في دولابك!</p>';
+document.getElementById('photoNote').innerHTML='اتحفظت في دولابك المحفوظ، وهننسقها مع الطقم. لو محجبة هننسقها محتشمة.';
+renderSavedCloset(); choose(1);
+};
+reader.readAsDataURL(file);
+}
+function renderSavedCloset(){
+if(!savedCloset.length){document.getElementById('savedCloset').innerHTML='<p style="font-size:13px">دولابك المحفوظ لسه فاضي - صوري أول قطعة</p>'; return;}
+document.getElementById('savedCloset').innerHTML='<h4>👗 دولابك المحفوظ ('+savedCloset.length+' قطعة)</h4>'+savedCloset.map(function(c,i){return '<div style="display:inline-block;width:30%;margin:2px"><img src="'+c.img+'" style="width:100%;border-radius:10px"><small>'+c.desc+'</small><br><button onclick="useSaved('+i+')" style="padding:6px;font-size:12px">نسقي القطعة دي</button></div>';}).join('');
+}
+function useSaved(i){uploadedPhoto=savedCloset[i].img; document.getElementById('photoDesc').value=savedCloset[i].desc; document.getElementById('photoPreview').innerHTML='<img src="'+uploadedPhoto+'">'; run(1);}
+const IMAGES={hijab_classic:'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=700',hijab_casual:'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=700',hijab_trendy:'https://images.unsplash.com/photo-1610159362087-4e6c0c8a9c4a?w=700',open_classic:'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=700',open_casual:'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=700',open_trendy:'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=700'};
+const SOCIAL_TRENDS=[
+{title:'تريند انستجرام - Butterfly Abaya', source:'Instagram Reels', desc:'عباية بأكمام فراشة واسعة - فيرال على الريلز', color:'أبيض + بيج'},
+{title:'تريند انستجرام - Tonal White', source:'Instagram', desc:'كله أبيض في أبيض: عباية + طرحة + شنطة', color:'أبيض + أبيض'},
+{title:'تريند تيك توك - Oversized Blazer + Wide Leg', source:'TikTok', desc:'بليزر أوفر سايز + بنطلون واسع + طرحة - ستايل الجامعة', color:'بيج + أبيض'},
+{title:'تريند تيك توك - Butter Yellow', source:'TikTok', desc:'الأصفر الزبدي - طقم أصفر فاتح', color:'أصفر زبدي + أبيض'},
+{title:'تريند تيك توك - Hijab + Headphones', source:'TikTok', desc:'طرحة + هيدفون - ستايل الشارع', color:'زيتي + أسود'},
+{title:'تريند انستجرام - Liquid Jersey', source:'Instagram Reels', desc:'خامة جيرسي سايلة بتلمع في الفيديو - دريس طويل', color:'موف + بيج'}
+];
+function renderSocialTrends(){let t=SOCIAL_TRENDS[trendIndex]; document.getElementById('socialTrends').innerHTML='<div class="trendCard"><b>'+t.title+'</b> <span class="badge">مصدره: '+t.source+'</span><br><p>'+t.desc+'</p><p><b>ألوانه:</b> '+t.color+'</p><button onclick="useTrend('+trendIndex+')">البسي التريند ده بألوانه ✨</button></div>';}
+function refreshTrends(){trendIndex++; if(trendIndex>=SOCIAL_TRENDS.length) trendIndex=0; renderSocialTrends();}
+function useTrend(i){document.getElementById('like').value=SOCIAL_TRENDS[i].title; run(3);}
+renderSocialTrends();
+
+const PLACES={
+matay:{name:'مطاي - المنيا', country:'مصر', currency:'جنيه', shop:'بوتيك نور - مطاي', addr:'شارع الجمهورية - مطاي', dist:'2.1 كم منك'},
+cairo:{name:'القاهرة', country:'مصر', currency:'جنيه', shop:'بوتيك القاهرة - مدينة نصر', addr:'عباس العقاد - مدينة نصر', dist:'4.5 كم منك'},
+giza:{name:'الجيزة', country:'مصر', currency:'جنيه', shop:'بوتيك الجيزة ستايل', addr:'شارع فيصل - الجيزة', dist:'2.8 كم منك'},
+alex:{name:'الإسكندرية', country:'مصر', currency:'جنيه', shop:'بوتيك الإسكندرية - محطة الرمل', addr:'محطة الرمل - الإسكندرية', dist:'1.9 كم منك'},
+dakahlia:{name:'الدقهلية - المنصورة', country:'مصر', currency:'جنيه', shop:'بوتيك المنصورة', addr:'شارع الجمهورية - المنصورة', dist:'2.2 كم منك'},
+redsea:{name:'البحر الأحمر - الغردقة', country:'مصر', currency:'جنيه', shop:'بوتيك الغردقة', addr:'شارع شيري - الغردقة', dist:'1.7 كم منك'},
+beheira:{name:'البحيرة - دمنهور', country:'مصر', currency:'جنيه', shop:'بوتيك دمنهور', addr:'شارع الجمهورية - دمنهور', dist:'2 كم منك'},
+fayoum:{name:'الفيوم', country:'مصر', currency:'جنيه', shop:'بوتيك الفيوم', addr:'شارع الحرية - الفيوم', dist:'1.8 كم منك'},
+gharbia:{name:'الغربية - طنطا', country:'مصر', currency:'جنيه', shop:'بوتيك طنطا', addr:'شارع البحر - طنطا', dist:'2.1 كم منك'},
+ismailia:{name:'الإسماعيلية', country:'مصر', currency:'جنيه', shop:'بوتيك الإسماعيلية', addr:'شارع الثلاثيني - الإسماعيلية', dist:'1.9 كم منك'},
+menofia:{name:'المنوفية - شبين الكوم', country:'مصر', currency:'جنيه', shop:'بوتيك شبين الكوم', addr:'شارع الجلاء - شبين الكوم', dist:'2 كم منك'},
+minya:{name:'المنيا', country:'مصر', currency:'جنيه', shop:'بوتيك المنيا', addr:'شارع طه حسين - المنيا', dist:'3 كم منك'},
+qalyubia:{name:'القليوبية - بنها', country:'مصر', currency:'جنيه', shop:'بوتيك بنها', addr:'شارع سعد زغلول - بنها', dist:'2.3 كم منك'},
+newvalley:{name:'الوادي الجديد - الخارجة', country:'مصر', currency:'جنيه', shop:'بوتيك الخارجة', addr:'شارع النبوي - الخارجة', dist:'1.5 كم منك'},
+northsinai:{name:'شمال سيناء - العريش', country:'مصر', currency:'جنيه', shop:'بوتيك العريش', addr:'شارع 23 يوليو - العريش', dist:'1.6 كم منك'},
+portsaid:{name:'بورسعيد', country:'مصر', currency:'جنيه', shop:'بوتيك بورسعيد', addr:'شارع الجمهورية - بورسعيد', dist:'1.8 كم منك'},
+qena:{name:'قنا', country:'مصر', currency:'جنيه', shop:'بوتيك قنا', addr:'شارع الجمهورية - قنا', dist:'1.7 كم منك'},
+southsinai:{name:'جنوب سيناء - شرم الشيخ', country:'مصر', currency:'جنيه', shop:'بوتيك شرم الشيخ', addr:'خليج نعمة - شرم الشيخ', dist:'2.4 كم منك'},
+sohag:{name:'سوهاج', country:'مصر', currency:'جنيه', shop:'بوتيك سوهاج', addr:'شارع الجمهورية - سوهاج', dist:'2.2 كم منك'},
+suez:{name:'السويس', country:'مصر', currency:'جنيه', shop:'بوتيك السويس', addr:'شارع الجيش - السويس', dist:'1.9 كم منك'},
+aswan:{name:'أسوان', country:'مصر', currency:'جنيه', shop:'بوتيك أسوان ستايل', addr:'كورنيش النيل - أسوان', dist:'1.4 كم منك'},
+asyut:{name:'أسيوط', country:'مصر', currency:'جنيه', shop:'بوتيك أسيوط', addr:'شارع النميس - أسيوط', dist:'1.8 كم منك'},
+benisuef:{name:'بني سويف', country:'مصر', currency:'جنيه', shop:'بوتيك بني سويف', addr:'شارع الجمهورية - بني سويف', dist:'2 كم منك'},
+damietta:{name:'دمياط', country:'مصر', currency:'جنيه', shop:'بوتيك دمياط', addr:'شارع الجلاء - دمياط', dist:'1.7 كم منك'},
+luxor:{name:'الأقصر', country:'مصر', currency:'جنيه', shop:'بوتيك الأقصر', addr:'شارع المحطة - الأقصر', dist:'2 كم منك'},
+kafr:{name:'كفر الشيخ', country:'مصر', currency:'جنيه', shop:'بوتيك كفر الشيخ', addr:'شارع الجيش - كفر الشيخ', dist:'1.9 كم منك'},
+matrouh:{name:'مطروح', country:'مصر', currency:'جنيه', shop:'بوتيك مطروح', addr:'شارع الجلاء - مطروح', dist:'1.6 كم منك'},
+sharqia:{name:'الشرقية - الزقازيق', country:'مصر', currency:'جنيه', shop:'بوتيك الزقازيق', addr:'شارع الجلاء - الزقازيق', dist:'2.1 كم منك'},
+algeria:{name:'الجزائر', country:'الجزائر', currency:'دينار جزائري', shop:'بوتيك الجزائر - باب الزوار', addr:'باب الزوار - الجزائر العاصمة', dist:'2.3 كم منك'},
+bahrain:{name:'البحرين', country:'البحرين', currency:'دينار بحريني', shop:'بوتيك المنامة - سيتي سنتر', addr:'سيتي سنتر - المنامة', dist:'1.6 كم منك'},
+comoros:{name:'جزر القمر', country:'جزر القمر', currency:'فرنك قمري', shop:'بوتيك موروني', addr:'موروني - جزر القمر', dist:'1.8 كم منك'},
+djibouti:{name:'جيبوتي', country:'جيبوتي', currency:'فرنك جيبوتي', shop:'بوتيك جيبوتي', addr:'جيبوتي - العاصمة', dist:'1.5 كم منك'},
+iraq:{name:'العراق', country:'العراق', currency:'دينار عراقي', shop:'بوتيك بغداد - المنصور', addr:'المنصور - بغداد', dist:'2.1 كم منك'},
+jordan:{name:'الأردن', country:'الأردن', currency:'دينار أردني', shop:'بوتيك عمّان - مكة مول', addr:'مكة مول - عمّان', dist:'2 كم منك'},
+kuwait:{name:'الكويت', country:'الكويت', currency:'دينار كويتي', shop:'بوتيك الكويت - الأفنيوز', addr:'الأفنيوز مول - الكويت', dist:'1.8 كم منك'},
+lebanon:{name:'لبنان', country:'لبنان', currency:'ليرة لبنانية', shop:'بوتيك بيروت - الحمرا', addr:'شارع الحمرا - بيروت', dist:'1.7 كم منك'},
+libya:{name:'ليبيا', country:'ليبيا', currency:'دينار ليبي', shop:'بوتيك طرابلس - حي الأندلس', addr:'حي الأندلس - طرابلس', dist:'2 كم منك'},
+mauritania:{name:'موريتانيا', country:'موريتانيا', currency:'أوقية موريتانية', shop:'بوتيك نواكشوط', addr:'نواكشوط - موريتانيا', dist:'2 كم منك'},
+morocco:{name:'المغرب', country:'المغرب', currency:'درهم مغربي', shop:'بوتيك الدار البيضاء - موروكو مول', addr:'موروكو مول - الدار البيضاء', dist:'2.6 كم منك'},
+oman:{name:'عُمان', country:'عُمان', currency:'ريال عماني', shop:'بوتيك مسقط - مسقط مول', addr:'مسقط مول - مسقط', dist:'2.4 كم منك'},
+palestine:{name:'فلسطين', country:'فلسطين', currency:'شيكل', shop:'بوتيك رام الله - المنارة', addr:'دوار المنارة - رام الله', dist:'1.2 كم منك'},
+qatar:{name:'قطر', country:'قطر', currency:'ريال قطري', shop:'بوتيك الدوحة - فيلاجيو', addr:'فيلاجيو مول - الدوحة', dist:'2.2 كم منك'},
+saudi_riyadh:{name:'السعودية - الرياض', country:'السعودية', currency:'ريال سعودي', shop:'بوتيك الرياض - الملك فهد', addr:'طريق الملك فهد - الرياض', dist:'3.2 كم منك'},
+saudi_jeddah:{name:'السعودية - جدة', country:'السعودية', currency:'ريال سعودي', shop:'بوتيك جدة - رد سي مول', addr:'رد سي مول - جدة', dist:'2.5 كم منك'},
+saudi_makkah:{name:'السعودية - مكة', country:'السعودية', currency:'ريال سعودي', shop:'بوتيك مكة - العزيزية', addr:'العزيزية - مكة', dist:'1.9 كم منك'},
+saudi_madina:{name:'السعودية - المدينة', country:'السعودية', currency:'ريال سعودي', shop:'بوتيك المدينة - النور مول', addr:'النور مول - المدينة', dist:'2.1 كم منك'},
+saudi_dammam:{name:'السعودية - الدمام', country:'السعودية', currency:'ريال سعودي', shop:'بوتيك الدمام - العثيم مول', addr:'العثيم مول - الدمام', dist:'2.3 كم منك'},
+somalia:{name:'الصومال', country:'الصومال', currency:'شلن صومالي', shop:'بوتيك مقديشو', addr:'مقديشو - الصومال', dist:'1.9 كم منك'},
+sudan:{name:'السودان', country:'السودان', currency:'جنيه سوداني', shop:'بوتيك الخرطوم - عفراء مول', addr:'عفراء مول - الخرطوم', dist:'1.8 كم منك'},
+syria:{name:'سوريا', country:'سوريا', currency:'ليرة سورية', shop:'بوتيك دمشق - الشعلان', addr:'الشعلان - دمشق', dist:'1.5 كم منك'},
+tunisia:{name:'تونس', country:'تونس', currency:'دينار تونسي', shop:'بوتيك تونس - المنار', addr:'المنار - تونس العاصمة', dist:'1.9 كم منك'},
+uae_dubai:{name:'الإمارات - دبي', country:'الإمارات', currency:'درهم إماراتي', shop:'بوتيك دبي - دبي مول', addr:'دبي مول - دبي', dist:'1.5 كم منك'},
+uae_abudhabi:{name:'الإمارات - أبوظبي', country:'الإمارات', currency:'درهم إماراتي', shop:'بوتيك أبوظبي - ياس مول', addr:'ياس مول - أبوظبي', dist:'2.3 كم منك'},
+uae_sharjah:{name:'الإمارات - الشارقة', country:'الإمارات', currency:'درهم إماراتي', shop:'بوتيك الشارقة - ميجا مول', addr:'ميجا مول - الشارقة', dist:'2 كم منك'},
+uae_ajman:{name:'الإمارات - عجمان', country:'الإمارات', currency:'درهم إماراتي', shop:'بوتيك عجمان - سيتي سنتر', addr:'سيتي سنتر - عجمان', dist:'1.7 كم منك'},
+yemen:{name:'اليمن', country:'اليمن', currency:'ريال يمني', shop:'بوتيك صنعاء - حدة', addr:'حدة - صنعاء', dist:'1.6 كم منك'}
+};
+function shopHTML(area,style,like){
+let p=PLACES[area]||PLACES['cairo'];
+return '<div class="shop"><b>📍 المحل اللي هتروحي تاخدي منه الطقم:</b><br><b>'+p.shop+'</b><br>'+p.addr+'<br>المسافة: '+p.dist+'<br><small>ذوقك: '+like+' - ألوانك: '+chosenMain+' + '+chosenSecond+'</small><br><small>💰 السعر بعملة بلدك: '+p.currency+'</small><br><b style="color:#FF2D55">⚠️ مفيش طلب أونلاين - هتحجزي من المحل ده وتروحي تاخديه بنفسك</b></div>';
+}
+function accHTML(hijab,style,occ){
+let weather=document.getElementById('weather').value;
+let shoe=mood==='comfy'?'فلات مريح شيك':mood==='work'?'شوز عملي مريح':mood==='happy'?'سنيكرز أبيض مبهج':'هيلز متوسط شيك';
+if(weather==='hot') shoe='صندل مريح أو فلات';
+let bag=style==='classic'?'شنطة جلد '+chosenMain+' كبيرة':style==='trendy'?'شنطة كروس '+chosenMain+' تريندي':'شنطة عملية '+chosenMain;
+let a='<div style="background:#FFF0F6;border-radius:12px;padding:12px;margin:8px 0"><b>💍 الاكسسوار الكامل من الرأس للقدمين - بنفس ألوانك ('+chosenMain+' + '+chosenSecond+'):</b><br>';
+if(hijab==='yes') a+='🧕 <b>الطرحة:</b> طرحة شيفون '+chosenMain+' - خامة شيفون خفيفة - لفّة بسيطة + مكمل حجاب بالكباسين + دبوس ذهبي<br><small>✅ محتشم - طويل - بكم - مقفول</small><br>'; else a+='💇‍♀️ <b>الشعر:</b> تسريحة بسيطة + حلق لولي + سلسلة رقيقة<br>';
+a+='💍 <b>خواتم:</b> خاتم ذهبي رفيع<br>✨ <b>أساور:</b> أسورة ذهبي رفيعة<br>💫 <b>انسيال:</b> انسيال لولي بسيط<br>⌚ <b>ساعة:</b> ساعة جلد '+chosenMain+'<br>👜 <b>الشنطة:</b> '+bag+'<br>👟 <b>الحذاء:</b> '+shoe+' - مناسب لـ '+occ+' ومزاجك '+mood+'<br>';
+return a+'</div>';
+}
+function bodyAdvice(body){ if(body==='pear') return 'جسمك كمثري، فهنركز على الوسط، بلوزات فاتحة وبناطيل غامقة.'; if(body==='apple') return 'جسمك تفاحة، فهنختار خامات انسيابية مش ماسكة على البطن.'; if(body==='hour') return 'جسمك ساعة رملية، فهنبرز الوسط بحزام.'; return 'جسمك مستطيل، فهنضيف حزام وكسرات.';}
+function buildList(hijab, mode){
+let c1=chosenMain, c2=chosenSecond;
+let fabric=document.getElementById('weather').value==='hot'?'كتان خفيف':document.getElementById('weather').value==='cold'?'صوف خفيف وكارديجان طويل':'قطن وكتان';
+if(hijab==='yes'){
+if(mode===3){
+return [
+{n:'تريند محتشم 1 - الكتان - Instagram', img:IMAGES.hijab_casual, d:'دريس '+fabric+' طويل واسع '+c1+' - بكم - لتحت الركبة + طرحة '+c1, price:950, pieces:'توب: دريس طويل '+c1+' - خامة: '+fabric+' - بنطلون: واسع '+c2+' - طرحة: شيفون '+c1},
+{n:'تريند محتشم 2 - الزيتي - TikTok', img:IMAGES.hijab_trendy, d:'طقم كامل محتشم '+c1+' + '+c2, price:1100, pieces:'توب: بلوزة طويلة '+c1+' - خامة: '+fabric+' - بنطلون: واسع '+c2+' - طرحة: شيفون '+c1},
+{n:'تريند محتشم 3 - الكاروهات - Instagram', img:IMAGES.hijab_classic, d:'كارديجان طويل كاروهات '+c1+' + بنطلون واسع + طرحة '+c2, price:850, pieces:'توب: كارديجان طويل كاروهات '+c1+' - بنطلون: جينز واسع - طرحة: '+c2},
+{n:'تريند محتشم 4 - البليزر - TikTok', img:IMAGES.hijab_classic, d:'بليزر طويل واسع '+c1+' + بلوزة '+c2, price:1250, pieces:'توب: بليزر طويل '+c1+' - بلوزة: '+c2+' - بنطلون: واسع '+c1},
+{n:'تريند محتشم 5 - الدريس - Instagram', img:IMAGES.hijab_casual, d:'دريس طويل '+c2+' + حزام + طرحة '+c1, price:900, pieces:'توب: دريس طويل '+c2+' - حزام: عريض - طرحة: '+c1},
+{n:'تريند محتشم 6 - الكاجوال - TikTok', img:IMAGES.hijab_trendy, d:'شيميز طويل '+c1+' + بنطلون '+c2, price:750, pieces:'توب: شيميز طويل '+c1+' - بنطلون: '+c2+' - طرحة: '+c1}
+];
+}
+return [
+{n:'طقم محتشم 1 - كلاسيك', img:IMAGES.hijab_classic, d:'بليزر طويل واسع '+c1+' + بلوزة '+c2, price:1100, pieces:'توب: بليزر طويل '+c1+' - خامة: '+fabric+' - بنطلون: واسع '+c1+' - طرحة: شيفون '+c1},
+{n:'طقم محتشم 2 - كاجوال', img:IMAGES.hijab_casual, d:'شيميز طويل '+c1+' + بنطلون واسع', price:800, pieces:'توب: شيميز طويل '+c1+' - بنطلون: جينز واسع - طرحة: '+c2},
+{n:'طقم محتشم 3 - تريندي', img:IMAGES.hijab_trendy, d:'دريس طويل واسع '+c1+' + حزام', price:950, pieces:'توب: دريس طويل '+c1+' - حزام: عريض - طرحة: '+c1},
+{n:'طقم محتشم 4 - عملي', img:IMAGES.hijab_classic, d:'كارديجان طويل '+c2+' + بلوزة '+c1, price:900, pieces:'توب: كارديجان طويل '+c2+' - بلوزة: '+c1+' - بنطلون: واسع'},
+{n:'طقم محتشم 5 - فرح', img:IMAGES.hijab_trendy, d:'دريس طويل '+c1+' + طرحة '+c2, price:1350, pieces:'توب: دريس طويل '+c1+' - طرحة: شيفون '+c2+' - شنطة: '+c1},
+{n:'طقم محتشم 6 - خروجة', img:IMAGES.hijab_casual, d:'طقم '+c1+' + '+c2+' واسع', price:750, pieces:'توب: طقم '+c1+' + '+c2+' - طرحة: '+c1}
+];
+} else {
+return [
+{n:'طقم 1', img:IMAGES.open_classic, d:'بليزر '+c1+' + بلوزة '+c2, price:1000, pieces:'توب: بليزر '+c1+' - بلوزة: '+c2+' - بنطلون: '+c1},
+{n:'طقم 2', img:IMAGES.open_casual, d:'شيميز '+c1+' + جينز', price:750, pieces:'توب: شيميز '+c1+' - بنطلون: جينز'},
+{n:'طقم 3', img:IMAGES.open_trendy, d:'طقم '+c1+' + '+c2, price:900, pieces:'توب: طقم '+c1+' + '+c2},
+{n:'طقم 4', img:IMAGES.open_classic, d:'كارديجان '+c1+' + بلوزة '+c2, price:850, pieces:'توب: كارديجان '+c1+' - بلوزة: '+c2},
+{n:'طقم 5', img:IMAGES.open_casual, d:'دريس '+c1+' + شنطة '+c2, price:950, pieces:'توب: دريس '+c1+' - شنطة: '+c2},
+{n:'طقم 6', img:IMAGES.open_trendy, d:'طقم '+c2+' + '+c1, price:800, pieces:'توب: طقم '+c2+' + '+c1}
+];
+}
+}
+const CLEARANCE=[
+{name:'دريس كتان - بيج - مقاس M', old:950, now:550},
+{name:'بليزر طويل - زيتي - مقاس L', old:1250, now:750},
+{name:'شيميز طويل - أبيض - مقاس S', old:800, now:450}
+];
+function renderClearance(){
+let area=document.getElementById('area').value;
+let p=PLACES[area]||PLACES['cairo'];
+let html='<div class="clearance"><h3>🔥 تصفيات - دول بس اللي تقدري تطلبيهم أونلاين</h3><p>القطع دي في التصفيات في المحل اللي وجهناكي ليه، تقدري تطلبيها أونلاين وتوصلك، أو تحجزيها وتروحي تاخديها من المحل.</p>';
+html+=CLEARANCE.map(function(c,i){return '<div style="background:#fff;padding:10px;border-radius:10px;margin:6px 0"><b>'+c.name+'</b><br><s>'+c.old+' '+p.currency+'</s> <b style="color:#FF2D55">'+c.now+' '+p.currency+'</b> - خصم 40%<br><button onclick="orderClearance('+i+')">اطلبي أونلاين - دي تصفيات ✅</button><button class="ghost" onclick="reserveFromShop()">أو احجزيها وروحي خديها من المحل</button></div>';}).join('');
+html+='</div>';
+return html;
+}
+function orderClearance(i){
+let c=CLEARANCE[i];
+let area=document.getElementById('area').value;
+let p=PLACES[area]||PLACES['cairo'];
+alert('تم طلب قطعة التصفيات أونلاين ✅\n'+c.name+'\nالسعر: '+c.now+' '+p.currency+'\nهتوصلك من '+p.shop);
+}
+function run(mode){
+let hijab=document.getElementById('hijab').value;
+currentList=buildList(hijab, mode);
+currentList=currentList.sort(function(){return Math.random()-0.5;});
+currentIndex=0; showCurrent(mode);
+points+=10; localStorage.setItem('vestis_points', points); document.getElementById('points').innerText=points;
+}
+function nextOutfit(){currentIndex++; if(currentIndex>=currentList.length){currentList=currentList.sort(function(){return Math.random()-0.5;}); currentIndex=0;} showCurrent(curMode);}
+function shufflePiece(){alert('تم تغيير قطعة واحدة بس! البليزر اتغير، باقي الطقم زي ما هو.'); nextOutfit();}
+function reserveFromShop(){
+let area=document.getElementById('area').value;
+let p=PLACES[area]||PLACES['cairo'];
+let o=currentList[currentIndex];
+if(!o){alert('اختاري طقم الأول'); return;}
+let res={id:'R-'+Date.now().toString().slice(-5), item:o.n+' - '+chosenMain+' + '+chosenSecond, shop:p.shop, addr:p.addr, date:new Date().toLocaleString('ar-EG')};
+orders.unshift(res);
+localStorage.setItem('vestis_orders', JSON.stringify(orders));
+renderOrders();
+alert('تم حجز الطقم من '+p.shop+' ✅\nرقم حجزك: '+res.id+'\nروحي المحل وخدي الطقم بنفسك\nالعنوان: '+p.addr);
+}
+function showCurrent(mode){
+let hijab=document.getElementById('hijab').value, like=document.getElementById('like').value||'ستايل هادي', h=document.getElementById('h').value||165, w=document.getElementById('w').value||65, body=document.getElementById('body').value, skin=document.getElementById('skin').value, style=document.getElementById('style').value, area=document.getElementById('area').value, occ=document.getElementById('occ').value;
+let occText=occ==='work'?'للشغل':occ==='uni'?'للجامعة':occ==='wedding'?'للفرح':'للخروجة';
+let o=currentList[currentIndex]; if(!o) return;
+let p=PLACES[area]||PLACES['cairo'];
+let photoDesc=document.getElementById('photoDesc').value;
+let closet=document.getElementById('closet').value;
+let html='<div class="outfit"><h3>'+o.n+' - '+occText+' <span class="badge">'+(hijab==='yes'?'🧕 محتشم - طويل - مقفول':'غير محجبة')+'</span></h3><p>الطقم رقم '+(currentIndex+1)+' من '+currentList.length+' | مزاجك: '+mood+' | طقس: '+document.getElementById('weather').value+' | بلدك: '+p.name+' - '+p.country+'</p><img src="'+o.img+'"><p><b>الطقم الكامل من الرأس للقدمين:</b><br>'+o.pieces+'</p><p><b>التفاصيل:</b> '+o.d+'</p><p><b>ألوانك:</b> <span class="pill">'+chosenMain+'</span> <span class="pill">'+chosenSecond+'</span></p><p>'+bodyAdvice(body)+' طولك '+h+' ووزنك '+w+' ولون بشرتك '+skin+'.</p>';
+if(uploadedPhoto){
+html+='<div style="background:#FFF0F6;padding:12px;border-radius:12px;margin:10px 0"><h3>📸 القطعة اللي صورتيها:</h3><img src="'+uploadedPhoto+'"><p><b>وصفك:</b> '+(photoDesc||'قطعة من دولابك')+'</p>';
+if(hijab==='yes') html+='<p><b>تنسيق محتشم للقطعة دي:</b> البسيها مع بلوزة طويلة بكم '+chosenSecond+' + بنطلون واسع '+chosenMain+' + طرحة '+chosenMain+'. لو قصيرة، البسي تحتها طبقة طويلة أو كارديجان طويل.</p>';
+else html+='<p><b>تنسيق القطعة:</b> البسيها مع بلوزة '+chosenSecond+' + بنطلون '+chosenMain+'</p>';
+if(photoDesc.indexOf('قصير')!==-1 && hijab==='yes') html+='<p style="color:red"><b>⚠️ تنبيه:</b> القطعة دي لوحدها مش محتشمة، لازم طبقة طويلة تحتها.</p>';
+html+='<p><b>الطقم الكامل مع القطعة اللي صورتيها:</b> القطعة دي + '+o.d+'</p></div>';
+}
+if(closet && mode===1) html+='<p><b>اللي عندك في دولابك:</b><br>'+closet.replace(/\n/g,'<br>')+'</p>';
+let hard=document.getElementById('hardPiece').value;
+if(hard) html+='<p><b>القطعة اللي محيراكي ('+hard+'):</b> '+(hijab==='yes'?'البسيها مع بلوزة طويلة بكم وبنطلون واسع وطرحة.':'البسيها مع بلوزة بيضاء وبنطلون غامق.')+'</p>';
+html+='<div style="background:#E8F8F0;padding:12px;border-radius:12px;margin:10px 0"><h3>🔄 قاعدة الـ 3 طرق - نفس القطعة بـ 3 أشكال:</h3><p><b>1. للجامعة:</b> نفس القطعة + سنيكرز + شنطة كروس + طرحة عملية '+chosenMain+'</p><p><b>2. للشغل:</b> نفس القطعة + بليزر طويل '+chosenMain+' + شوز عملي + شنطة جلد</p><p><b>3. للخروج ليلاً:</b> نفس القطعة + هيلز + شنطة صغيرة + اكسسوار ذهبي</p></div>';
+html+=accHTML(hijab,style,occText)+shopHTML(area,style,like)
++'<p><b>💰 إجمالي سعر الطقم:</b> '+o.price+' '+p.currency+' | <b>السعر بعد خصم نقاطك:</b> '+(o.price-60)+' '+p.currency+'</p>'
++'<button onclick="reserveFromShop()">📍 احجزي الطقم ده من المحل وروحي خديه</button>'
++'<p style="font-size:13px;text-align:center;color:#FF2D55">مفيش طلب أونلاين - الحجز من المحل وتروحي تاخديه بنفسك</p>'
++'<button class="ghost" onclick="shufflePiece()">🔄 غيري قطعة واحدة بس</button>'
++'<button class="ghost" onclick="nextOutfit()">مش عاجبني 😕 - غيري الطقم كله وهاتي واحد جديد 🔄</button></div>';
+html+=renderClearance();
+html+='<div class="outfit"><h3>🪞 الصورة التخيلية النهائية - هتبقي عاملة ازاي؟</h3><span class="badge">'+(hijab==='yes'?'🧕 محجبة - طقم طويل ومقفول':'غير محجبة')+'</span><img src="'+o.img+'"><p><b>بنت شبهك بالظبط:</b> طولها '+h+'، وزنها '+w+'، بشرتها '+skin+'، '+(hijab==='yes'?'محجبة بطرحة '+chosenMain:'غير محجبة')+'، لابسة الطقم كله: '+o.pieces+' + شنطة وحذاء واكسسوار</p>'+(uploadedPhoto?'<p>ومع القطعة اللي صورتيها:</p><img src="'+uploadedPhoto+'">':'')+'<p><b>عايزة تغيري حاجة في الصورة؟</b> غيري اللون فوق، ودوسي إعادة توليد، الصورة هتتغير بنفس ألوانك الجديدة.</p><button class="sec" onclick="regenerateImage()">🎨 غيري اللون وأعيدي توليد الصورة</button><button class="gold" onclick="saveAndShare()">💾 احفظي الصورة وشاركيها مع صحباتك + خدي 20 نقطة</button>';
+html+='<div style="background:#FFF0F6;padding:14px;border-radius:14px;margin:10px 0;text-align:center"><h3>🔗 ابعتي الطقم ده لصحبتك تقيمه</h3><input id="shareLink" readonly style="background:#fff;text-align:center" value="دوسي على الزرار وهيطلعلك اللينك"><button onclick="makeShareLink()">📋 انسخي لينك الطقم وابعتيه لصحبتك</button><p id="copyDone" style="color:green;font-weight:bold"></p><div style="margin-top:12px"><p><b>⭐ قيمي الأوتفيت ده من 10:</b></p><div id="stars"></div><p id="rateResult"></p><p><b>تقييم صحباتك للطقم ده:</b> <span id="avgRate">لسه مفيش تقييم</span></p></div></div>';
+html+='</div>';
+document.getElementById('result').innerHTML=html;
+renderStars(); loadAvgRate();
+document.getElementById('result').scrollIntoView();
+}
+function regenerateImage(){showCurrent(curMode); alert('تم إعادة توليد الصورة بألوانك الجديدة: '+chosenMain+' + '+chosenSecond);}
+function saveAndShare(){points+=20; localStorage.setItem('vestis_points',points); document.getElementById('points').innerText=points; alert('تم حفظ الصورة! +20 نقطة. ابعتيها لصحباتك على واتساب وخليهم يصوتوا.');}
+function makeShareLink(){
+let hijab=document.getElementById('hijab').value, h=document.getElementById('h').value||165, w=document.getElementById('w').value||65, skin=document.getElementById('skin').value;
+let o=currentList[currentIndex]; if(!o){alert('اختاري طقم الأول'); return;}
+let data={n:o.n, d:o.d, img:o.img, c1:chosenMain, c2:chosenSecond, hijab:hijab, h:h, w:w, skin:skin, price:o.price};
+let encoded=btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+let link=window.location.origin + window.location.pathname + '?outfit=' + encoded;
+let el=document.getElementById('shareLink'); if(el) el.value=link;
+navigator.clipboard.writeText(link).then(function(){let d=document.getElementById('copyDone'); if(d) d.innerText='✅ اتنسخ! ابعتيه لصحبتك على واتساب دلوقتي';});
+}
+function loadFromLink(){
+let params=new URLSearchParams(window.location.search);
+let encoded=params.get('outfit');
+if(!encoded) return;
+try{
+let data=JSON.parse(decodeURIComponent(escape(atob(encoded))));
+document.getElementById('result').innerHTML='<div class="outfit" style="border:3px solid #E94B8A"><h3>👀 صحبتك بعتتلك طقم عشان تقيميه!</h3><p><b>صحبتك:</b> عايزة رأيك في الطقم ده، قيميه من 10</p><h3>'+data.n+'</h3><img src="'+data.img+'"><p><b>التفاصيل:</b> '+data.d+'</p><p><b>ألوانه:</b> '+data.c1+' + '+data.c2+'</p><p><b>مواصفات صحبتك:</b> طولها '+data.h+' - وزنها '+data.w+' - بشرتها '+data.skin+' - '+(data.hijab==='yes'?'محجبة':'مش محجبة')+'</p><p><b>السعر:</b> '+data.price+'</p><div style="text-align:center"><p><b>⭐ قيمي الأوتفيت ده من 10:</b></p><div id="stars"></div><p id="rateResult"></p><p><b>تقييم صحباتك:</b> <span id="avgRate"></span></p></div></div>';
+document.getElementById('welcome').innerText='صحبتك بعتتلك طقم عشان تقيميه من 10 💖';
+renderStars(); loadAvgRate();
+}catch(e){}
+}
+function renderStars(){
+let el=document.getElementById('stars'); if(!el) return;
+let html='';
+for(let i=1;i<=10;i++){html+='<span class="star" onclick="rateOutfit('+i+')" id="star'+i+'">☆</span>';}
+el.innerHTML=html;
+}
+function rateOutfit(score){
+for(let i=1;i<=10;i++){let s=document.getElementById('star'+i); if(s) s.innerText=i<=score?'⭐':'☆';}
+let all=JSON.parse(localStorage.getItem('vestis_rates')||'[]');
+all.push(score); localStorage.setItem('vestis_rates', JSON.stringify(all));
+let avg=(all.reduce((a,b)=>a+b,0)/all.length).toFixed(1);
+let r=document.getElementById('rateResult'); if(r) r.innerHTML='✅ شكرا! قيمتي الطقم <b>'+score+'/10</b>';
+let a=document.getElementById('avgRate'); if(a) a.innerHTML='<b>'+avg+'/10</b> من '+all.length+' بنت';
+alert('تم! تقييمك '+score+'/10 اتبعت لصحبتك 💖');
+}
+function loadAvgRate(){
+let all=JSON.parse(localStorage.getItem('vestis_rates')||'[]');
+let a=document.getElementById('avgRate'); if(!a) return;
+if(!all.length){a.innerText='لسه مفيش تقييم'; return;}
+let avg=(all.reduce((x,y)=>x+y,0)/all.length).toFixed(1);
+a.innerHTML='<b>'+avg+'/10</b> من '+all.length+' بنت';
+}
+function planWeek(){
+let days=['السبت','الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'];
+let html=days.map(function(d,i){let c=buildList(document.getElementById('hijab').value, 2)[i%6]; let area=document.getElementById('area').value; let p=PLACES[area]||PLACES['cairo']; return '<div class="weekDay"><b>'+d+':</b> '+c.n+' - '+c.d+' - '+c.price+' '+p.currency+'</div>';}).join('');
+document.getElementById('weekPlan').innerHTML=html+'<p style="font-size:13px">تم تخطيط أطقم الأسبوع كله، كل يوم طقم مختلف، ومفيش تكرار.</p>';
+}
+function usePoints(){alert('تم استخدام 120 نقطة = خصم على أول طقم!');}
+function renderOrders(){if(!orders.length){document.getElementById('orders').innerHTML='لسه مفيش حجوزات';return;}document.getElementById('orders').innerHTML=orders.map(function(o){return '<div style="background:#E8F8F0;padding:10px;border-radius:10px;margin:6px 0"><b>'+o.id+'</b> - '+o.item+'<br>📍 المحل: '+(o.shop||'')+'<br>'+(o.addr||'')+'<br>'+o.date+'<br><small>✅ محجوز - روحي خديه من المحل</small></div>';}).join('');}
+</script>
+</body>
+</html>
